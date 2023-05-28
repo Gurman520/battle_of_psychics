@@ -1,0 +1,84 @@
+swagger: "2.0"
+info:
+  description: "Service The battle of psychics"
+  title: battle
+  version: 1.0.0
+consumes:
+  - application/json
+produces:
+  - application/json
+schemes:
+  - http
+
+paths:            
+  /healthCheck:
+    get:
+      tags:
+        - Standard
+      operationId: healthCheck
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+
+  /Сonceive:
+    get:
+      tags:
+        - server
+      operationId: conceive
+      responses:
+         200:
+          description: OK
+          schema:
+            type: array
+            items: 
+              $ref: "#/definitions/Сonceive"
+
+  /Result:
+    post:
+      tags:
+       - server
+      operationsId: result
+      parameters:
+        - name: body
+          in: body
+          schema:
+            number:
+              type: integer
+      responses:
+        200:
+          description: ok
+          schema: 
+            type: array
+            items: 
+              $ref: "#/definitions/Psychics"
+
+definitions:
+  error:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        description: Either same as HTTP Status Code OR >= 600.
+        type: integer
+        format: int32
+      message:
+        type: string
+  
+  Psychics:
+    type: object
+    properties:
+      reliability:
+        type: integer
+  
+  Сonceive:
+    type: object
+    properties:
+      hypothesis:
+        type: integer
