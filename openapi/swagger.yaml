@@ -119,6 +119,7 @@ definitions:
     properties:
       reliability:
         type: integer
+        x-nullable: true
   
   ResponseСonceive:
     type: object

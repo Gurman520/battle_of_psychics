@@ -32,7 +32,8 @@ func ResultToRest(battle app.Battle) []*models.ResponseResult {
 }
 
 func oneReliabilityToRest(p app.Psychic) *models.ResponseResult {
+	n := int64(p.Reliability.Percent)
 	return &models.ResponseResult{
-		Reliability: int64(p.Reliability.Percent),
+		Reliability: &n,
 	}
 }

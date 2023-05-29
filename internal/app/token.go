@@ -1,6 +1,7 @@
 package app
 
 import (
+	"battle_of_psychics/internal/def"
 	"fmt"
 	"time"
 
@@ -12,7 +13,7 @@ func CreateToken() (string, error) {
 		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 	})
 
-	secretKey := []byte("my_secret_key")
+	secretKey := []byte(def.SecretKey)
 
 	tokenString, err := token.SignedString(secretKey)
 	if err != nil {

@@ -2,6 +2,7 @@ package api
 
 import (
 	"battle_of_psychics/internal/app"
+	"battle_of_psychics/internal/def"
 	"battle_of_psychics/openapi/models"
 
 	"github.com/dgrijalva/jwt-go"
@@ -10,7 +11,7 @@ import (
 func ValidateHeader(stringToken string) (*models.Principal, error) {
 	claims := jwt.MapClaims{}
 	token, _ := jwt.ParseWithClaims(stringToken, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte("my_secret_key"), nil
+		return []byte(def.SecretKey), nil
 	})
 
 	valid := token.Claims.Valid()

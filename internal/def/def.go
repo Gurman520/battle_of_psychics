@@ -7,10 +7,13 @@ import (
 	"github.com/caarlos0/env/v6"
 	"github.com/joho/godotenv"
 
+	"strings"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"strings"
 )
+
+const SecretKey = "this_is_my_secret_key"
 
 type Config struct {
 	HTTPPort       string `env:"HTTP_PORT" envDefault:"8080"`

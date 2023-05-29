@@ -167,7 +167,8 @@ func init() {
       "type": "object",
       "properties": {
         "reliability": {
-          "type": "integer"
+          "type": "integer",
+          "x-nullable": true
         }
       }
     },
@@ -379,7 +380,8 @@ func init() {
       "type": "object",
       "properties": {
         "reliability": {
-          "type": "integer"
+          "type": "integer",
+          "x-nullable": true
         }
       }
     },

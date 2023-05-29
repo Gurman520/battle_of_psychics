@@ -20,7 +20,7 @@ import (
 type ResponseResult struct {
 
 	// reliability
-	Reliability int64 `json:"reliability,omitempty"`
+	Reliability *int64 `json:"reliability,omitempty"`
 }
 
 // UnmarshalJSON unmarshals this object while disallowing additional properties from JSON
@@ -28,7 +28,7 @@ func (m *ResponseResult) UnmarshalJSON(data []byte) error {
 	var props struct {
 
 		// reliability
-		Reliability int64 `json:"reliability,omitempty"`
+		Reliability *int64 `json:"reliability,omitempty"`
 	}
 
 	dec := json.NewDecoder(bytes.NewReader(data))
