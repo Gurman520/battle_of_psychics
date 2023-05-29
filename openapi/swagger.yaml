@@ -9,12 +9,21 @@ produces:
   - application/json
 schemes:
   - http
+securityDefinitions:
+   key:
+    type: apiKey
+    in: header
+    name: x-token
+security:
+  - key: []
 
 paths:            
   /healthCheck:
     get:
       tags:
         - Standard
+      security:
+        - {}
       operationId: healthCheck
       responses:
         200:
@@ -25,10 +34,25 @@ paths:
               ok:
                 type: boolean
 
-  /Сonceive:
+  /Session:
+    get:
+      tags:
+       - server
+      security:
+       - {}
+      operationId: getSession
+      responses:
+        200:
+          description: Success create session
+          schema:
+            $ref: "#/definitions/ResponseSession"
+
+  /Conceive:
     get:
       tags:
         - server
+      security:
+        - key: []
       operationId: conceive
       responses:
          200:
@@ -36,19 +60,20 @@ paths:
           schema:
             type: array
             items: 
-              $ref: "#/definitions/Сonceive"
+              $ref: "#/definitions/ResponseСonceive"
 
   /Result:
     post:
       tags:
        - server
-      operationsId: result
+      security:
+        - key: []
+      operationId: result
       parameters:
         - name: body
           in: body
           schema:
-            number:
-              type: integer
+            $ref: "#/definitions/RResult"
       responses:
         200:
           description: ok
@@ -77,8 +102,23 @@ definitions:
       reliability:
         type: integer
   
-  Сonceive:
+  ResponseСonceive:
     type: object
     properties:
       hypothesis:
         type: integer
+
+  ResponseSession:
+    type: object
+    properties:
+      jwt:
+        type: string
+
+  RResult:
+    type: object
+    properties:
+      number:
+        type: integer
+
+  principal:
+    type: string

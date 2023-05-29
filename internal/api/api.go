@@ -5,6 +5,7 @@ import (
 
 	"battle_of_psychics/internal/app"
 	"battle_of_psychics/internal/def"
+	"battle_of_psychics/openapi/models"
 	"battle_of_psychics/openapi/restapi"
 	"battle_of_psychics/openapi/restapi/operations"
 	"battle_of_psychics/openapi/restapi/operations/standard"
@@ -37,6 +38,8 @@ func NewServer(cfg *def.Config, l *zap.SugaredLogger, battleSvc app.BattleServer
 
 	api := operations.NewBattleAPI(swaggerSpec)
 
+	api.KeyAuth = ValidateHeader
+
 	api.Logger = structlog.New(structlog.KeyUnit, "swagger").Printf
 
 	api.StandardHealthCheckHandler = standard.HealthCheckHandlerFunc(healthCheck)
@@ -51,20 +54,9 @@ func NewServer(cfg *def.Config, l *zap.SugaredLogger, battleSvc app.BattleServer
 	}
 	server.Port = int(port)
 
-	// newCORS := cors.New(cors.Options{
-	// 	AllowedOrigins:   splitCommaSeparatedStr(cfg.AllowedOrigins),
-	// 	AllowedMethods:   []string{"POST", "PUT", "GET", "DELETE", "OPTIONS"},
-	// 	AllowedHeaders:   []string{"*"},
-	// 	AllowCredentials: true,
-	// 	// Enable Debugging for testing, consider disabling in production
-	// 	Debug: true,
-	// })
-	// newCORS.Log = cors.Logger(structlog.New(structlog.KeyUnit, "CORS"))
-	// handleCORS := newCORS.Handler
-
 	return server, nil
 }
 
-func healthCheck(params standard.HealthCheckParams) standard.HealthCheckResponder {
+func healthCheck(params standard.HealthCheckParams, principal *models.Principal) standard.HealthCheckResponder {
 	return standard.NewHealthCheckOK().WithPayload(&standard.HealthCheckOKBody{Ok: true})
 }

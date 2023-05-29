@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тестирование экстрасенсов</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+  <div class="container mt-4">
+    <div class="text-center">
+      <button class="btn btn-primary">Загадал</button>
+    </div>
+
+    </br><h3>Догадки экстрасенсов</h3>
+    <div class="row mt-4">
+      <div class="col">
+        <table class="table">
+          <tr>
+            <td>Экстрасенс 1</td>
+            <td>Экстрасенс 2</td>
+            <td>Экстрасенс 3</td>
+            <td>Экстрасенс 4</td>
+            <td>Экстрасенс 5</td>
+          </tr>
+          <tr>
+            <td>Его предположение</td>
+            <td>Его предположение</td>
+            <td>Его предположение</td>
+            <td>Его предположение</td>
+            <td>Его предположение</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+</br><h3>Разрешить спор экстрасенсов</h3>
+    <div class="row">
+      <div class="col-md-6">
+        <input type="number" class="form-control" placeholder="Введите задуманное число">
+      </div>
+      <div class="col-md-6">
+        <button class="btn btn-primary">Ответить</button>
+      </div>
+    </div>
+
+</br><h3>Достоверность экстрасенсов</h3>
+    <div class="row mt-4">
+      <div class="col">
+        <table class="table">
+          <tr>
+            <td>Экстрасенс 1</td>
+            <td>Экстрасенс 2</td>
+            <td>Экстрасенс 3</td>
+            <td>Экстрасенс 4</td>
+            <td>Экстрасенс 5</td>
+          </tr>
+          <tr>
+            <td>Его достоверность в %</td>
+            <td>Его достоверность в %</td>
+            <td>Его достоверность в %</td>
+            <td>Его достоверность в %</td>
+            <td>Его достоверность в %</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+</br><h3>История догадок экстрасенсов</h3>
+    <div class="row mt-4">
+      <div class="col">
+        <table class="table">
+          <tr>
+            <td>Экстрасенс 1</td>
+            <td>Экстрасенс 2</td>
+            <td>Экстрасенс 3</td>
+            <td>Экстрасенс 4</td>
+            <td>Экстрасенс 5</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+      fetch('/session')
+        .then(response => response.json())
+        .then(data => {
+          var sessionToken = data.token;
+          console.log('Получен токен доступа:', sessionToken);
+          // Сохраняем токен доступа в локальном хранилище браузера
+          localStorage.setItem('accessToken', sessionToken);
+        })
+        .catch(error => {
+          console.error('Ошибка при получении токена доступа:', error);
+        });
+    });
+  </script>
+</body>
+</html>
