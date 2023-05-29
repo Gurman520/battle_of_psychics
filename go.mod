@@ -16,6 +16,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/pkg/errors v0.9.1
 	github.com/powerman/structlog v0.7.3
+	github.com/rs/cors v1.7.0
 	go.uber.org/zap v1.24.0
 	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2
 )

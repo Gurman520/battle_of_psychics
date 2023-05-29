@@ -27,7 +27,7 @@ type ResultOK struct {
 	/*
 	  In: Body
 	*/
-	Payload []*models.Psychics `json:"body,omitempty"`
+	Payload []*models.ResponseResult `json:"body,omitempty"`
 }
 
 // NewResultOK creates ResultOK with default headers values
@@ -37,13 +37,13 @@ func NewResultOK() *ResultOK {
 }
 
 // WithPayload adds the payload to the result o k response
-func (o *ResultOK) WithPayload(payload []*models.Psychics) *ResultOK {
+func (o *ResultOK) WithPayload(payload []*models.ResponseResult) *ResultOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the result o k response
-func (o *ResultOK) SetPayload(payload []*models.Psychics) {
+func (o *ResultOK) SetPayload(payload []*models.ResponseResult) {
 	o.Payload = payload
 }
 
@@ -54,7 +54,7 @@ func (o *ResultOK) WriteResponse(rw http.ResponseWriter, producer runtime.Produc
 	payload := o.Payload
 	if payload == nil {
 		// return empty array
-		payload = make([]*models.Psychics, 0, 50)
+		payload = make([]*models.ResponseResult, 0, 50)
 	}
 
 	if err := producer.Produce(rw, payload); err != nil {
@@ -63,6 +63,114 @@ func (o *ResultOK) WriteResponse(rw http.ResponseWriter, producer runtime.Produc
 }
 
 func (o *ResultOK) ResultResponder() {}
+
+// ResultUnauthorizedCode is the HTTP code returned for type ResultUnauthorized
+const ResultUnauthorizedCode int = 401
+
+/*
+ResultUnauthorized incorrect api key auth
+
+swagger:response resultUnauthorized
+*/
+type ResultUnauthorized struct {
+}
+
+// NewResultUnauthorized creates ResultUnauthorized with default headers values
+func NewResultUnauthorized() *ResultUnauthorized {
+
+	return &ResultUnauthorized{}
+}
+
+// WriteResponse to the client
+func (o *ResultUnauthorized) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(401)
+}
+
+func (o *ResultUnauthorized) ResultResponder() {}
+
+// ResultNotFoundCode is the HTTP code returned for type ResultNotFound
+const ResultNotFoundCode int = 404
+
+/*
+ResultNotFound a session with such a token was not found
+
+swagger:response resultNotFound
+*/
+type ResultNotFound struct {
+}
+
+// NewResultNotFound creates ResultNotFound with default headers values
+func NewResultNotFound() *ResultNotFound {
+
+	return &ResultNotFound{}
+}
+
+// WriteResponse to the client
+func (o *ResultNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(404)
+}
+
+func (o *ResultNotFound) ResultResponder() {}
+
+// ResultNotAcceptableCode is the HTTP code returned for type ResultNotAcceptable
+const ResultNotAcceptableCode int = 406
+
+/*
+ResultNotAcceptable cannot call a method without first calling /Conceive
+
+swagger:response resultNotAcceptable
+*/
+type ResultNotAcceptable struct {
+}
+
+// NewResultNotAcceptable creates ResultNotAcceptable with default headers values
+func NewResultNotAcceptable() *ResultNotAcceptable {
+
+	return &ResultNotAcceptable{}
+}
+
+// WriteResponse to the client
+func (o *ResultNotAcceptable) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(406)
+}
+
+func (o *ResultNotAcceptable) ResultResponder() {}
+
+// ResultInternalServerErrorCode is the HTTP code returned for type ResultInternalServerError
+const ResultInternalServerErrorCode int = 500
+
+/*
+ResultInternalServerError internal error
+
+swagger:response resultInternalServerError
+*/
+type ResultInternalServerError struct {
+}
+
+// NewResultInternalServerError creates ResultInternalServerError with default headers values
+func NewResultInternalServerError() *ResultInternalServerError {
+
+	return &ResultInternalServerError{}
+}
+
+// WriteResponse to the client
+func (o *ResultInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(500)
+}
+
+func (o *ResultInternalServerError) ResultResponder() {}
 
 type ResultNotImplementedResponder struct {
 	middleware.Responder

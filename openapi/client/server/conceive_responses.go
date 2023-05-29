@@ -29,6 +29,24 @@ func (o *ConceiveReader) ReadResponse(response runtime.ClientResponse, consumer 
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := NewConceiveUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 404:
+		result := NewConceiveNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewConceiveInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -96,6 +114,174 @@ func (o *ConceiveOK) readResponse(response runtime.ClientResponse, consumer runt
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewConceiveUnauthorized creates a ConceiveUnauthorized with default headers values
+func NewConceiveUnauthorized() *ConceiveUnauthorized {
+	return &ConceiveUnauthorized{}
+}
+
+/*
+ConceiveUnauthorized describes a response with status code 401, with default header values.
+
+incorrect api key auth
+*/
+type ConceiveUnauthorized struct {
+}
+
+// IsSuccess returns true when this conceive unauthorized response has a 2xx status code
+func (o *ConceiveUnauthorized) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this conceive unauthorized response has a 3xx status code
+func (o *ConceiveUnauthorized) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this conceive unauthorized response has a 4xx status code
+func (o *ConceiveUnauthorized) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this conceive unauthorized response has a 5xx status code
+func (o *ConceiveUnauthorized) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this conceive unauthorized response a status code equal to that given
+func (o *ConceiveUnauthorized) IsCode(code int) bool {
+	return code == 401
+}
+
+// Code gets the status code for the conceive unauthorized response
+func (o *ConceiveUnauthorized) Code() int {
+	return 401
+}
+
+func (o *ConceiveUnauthorized) Error() string {
+	return fmt.Sprintf("[GET /Conceive][%d] conceiveUnauthorized ", 401)
+}
+
+func (o *ConceiveUnauthorized) String() string {
+	return fmt.Sprintf("[GET /Conceive][%d] conceiveUnauthorized ", 401)
+}
+
+func (o *ConceiveUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewConceiveNotFound creates a ConceiveNotFound with default headers values
+func NewConceiveNotFound() *ConceiveNotFound {
+	return &ConceiveNotFound{}
+}
+
+/*
+ConceiveNotFound describes a response with status code 404, with default header values.
+
+a session with such a token was not found
+*/
+type ConceiveNotFound struct {
+}
+
+// IsSuccess returns true when this conceive not found response has a 2xx status code
+func (o *ConceiveNotFound) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this conceive not found response has a 3xx status code
+func (o *ConceiveNotFound) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this conceive not found response has a 4xx status code
+func (o *ConceiveNotFound) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this conceive not found response has a 5xx status code
+func (o *ConceiveNotFound) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this conceive not found response a status code equal to that given
+func (o *ConceiveNotFound) IsCode(code int) bool {
+	return code == 404
+}
+
+// Code gets the status code for the conceive not found response
+func (o *ConceiveNotFound) Code() int {
+	return 404
+}
+
+func (o *ConceiveNotFound) Error() string {
+	return fmt.Sprintf("[GET /Conceive][%d] conceiveNotFound ", 404)
+}
+
+func (o *ConceiveNotFound) String() string {
+	return fmt.Sprintf("[GET /Conceive][%d] conceiveNotFound ", 404)
+}
+
+func (o *ConceiveNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewConceiveInternalServerError creates a ConceiveInternalServerError with default headers values
+func NewConceiveInternalServerError() *ConceiveInternalServerError {
+	return &ConceiveInternalServerError{}
+}
+
+/*
+ConceiveInternalServerError describes a response with status code 500, with default header values.
+
+internal error
+*/
+type ConceiveInternalServerError struct {
+}
+
+// IsSuccess returns true when this conceive internal server error response has a 2xx status code
+func (o *ConceiveInternalServerError) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this conceive internal server error response has a 3xx status code
+func (o *ConceiveInternalServerError) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this conceive internal server error response has a 4xx status code
+func (o *ConceiveInternalServerError) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this conceive internal server error response has a 5xx status code
+func (o *ConceiveInternalServerError) IsServerError() bool {
+	return true
+}
+
+// IsCode returns true when this conceive internal server error response a status code equal to that given
+func (o *ConceiveInternalServerError) IsCode(code int) bool {
+	return code == 500
+}
+
+// Code gets the status code for the conceive internal server error response
+func (o *ConceiveInternalServerError) Code() int {
+	return 500
+}
+
+func (o *ConceiveInternalServerError) Error() string {
+	return fmt.Sprintf("[GET /Conceive][%d] conceiveInternalServerError ", 500)
+}
+
+func (o *ConceiveInternalServerError) String() string {
+	return fmt.Sprintf("[GET /Conceive][%d] conceiveInternalServerError ", 500)
+}
+
+func (o *ConceiveInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

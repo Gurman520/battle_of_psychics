@@ -14,17 +14,17 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// RResult r result
+// Result result
 //
-// swagger:model RResult
-type RResult struct {
+// swagger:model Result
+type Result struct {
 
 	// number
 	Number int64 `json:"number,omitempty"`
 }
 
 // UnmarshalJSON unmarshals this object while disallowing additional properties from JSON
-func (m *RResult) UnmarshalJSON(data []byte) error {
+func (m *Result) UnmarshalJSON(data []byte) error {
 	var props struct {
 
 		// number
@@ -41,18 +41,18 @@ func (m *RResult) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// Validate validates this r result
-func (m *RResult) Validate(formats strfmt.Registry) error {
+// Validate validates this result
+func (m *Result) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this r result based on context it is used
-func (m *RResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this result based on context it is used
+func (m *Result) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *RResult) MarshalBinary() ([]byte, error) {
+func (m *Result) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -60,8 +60,8 @@ func (m *RResult) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *RResult) UnmarshalBinary(b []byte) error {
-	var res RResult
+func (m *Result) UnmarshalBinary(b []byte) error {
+	var res Result
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

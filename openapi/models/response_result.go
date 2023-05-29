@@ -14,17 +14,17 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// Psychics psychics
+// ResponseResult response result
 //
-// swagger:model Psychics
-type Psychics struct {
+// swagger:model ResponseResult
+type ResponseResult struct {
 
 	// reliability
 	Reliability int64 `json:"reliability,omitempty"`
 }
 
 // UnmarshalJSON unmarshals this object while disallowing additional properties from JSON
-func (m *Psychics) UnmarshalJSON(data []byte) error {
+func (m *ResponseResult) UnmarshalJSON(data []byte) error {
 	var props struct {
 
 		// reliability
@@ -41,18 +41,18 @@ func (m *Psychics) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// Validate validates this psychics
-func (m *Psychics) Validate(formats strfmt.Registry) error {
+// Validate validates this response result
+func (m *ResponseResult) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this psychics based on context it is used
-func (m *Psychics) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this response result based on context it is used
+func (m *ResponseResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *Psychics) MarshalBinary() ([]byte, error) {
+func (m *ResponseResult) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -60,8 +60,8 @@ func (m *Psychics) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *Psychics) UnmarshalBinary(b []byte) error {
-	var res Psychics
+func (m *ResponseResult) UnmarshalBinary(b []byte) error {
+	var res ResponseResult
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

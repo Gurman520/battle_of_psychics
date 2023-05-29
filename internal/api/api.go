@@ -1,6 +1,7 @@
 package api
 
 import (
+	"net/http"
 	"strconv"
 
 	"battle_of_psychics/internal/app"
@@ -13,6 +14,7 @@ import (
 	"github.com/go-openapi/loads"
 	"github.com/pkg/errors"
 	"github.com/powerman/structlog"
+	"github.com/rs/cors"
 	"go.uber.org/zap"
 )
 
@@ -54,9 +56,34 @@ func NewServer(cfg *def.Config, l *zap.SugaredLogger, battleSvc app.BattleServer
 	}
 	server.Port = int(port)
 
+	middlewares := func(handler http.Handler) http.Handler {
+		return handler
+	}
+
+	newCORS := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"POST", "PUT", "GET", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: false,
+	})
+	newCORS.Log = cors.Logger(structlog.New(structlog.KeyUnit, "CORS"))
+	handleCORS := newCORS.Handler
+
+	server.SetHandler(handleCORS(api.Serve(middlewares)))
+
 	return server, nil
 }
 
 func healthCheck(params standard.HealthCheckParams, principal *models.Principal) standard.HealthCheckResponder {
 	return standard.NewHealthCheckOK().WithPayload(&standard.HealthCheckOKBody{Ok: true})
 }
+
+// func splitCommaSeparatedStr(commaSeparated string) (result []string) {
+// 	for _, item := range strings.Split(commaSeparated, ",") {
+// 		item = strings.TrimSpace(item)
+// 		if item != "" {
+// 			result = append(result, item)
+// 		}
+// 	}
+// 	return
+// }

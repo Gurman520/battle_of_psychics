@@ -29,6 +29,18 @@ func (o *GetSessionReader) ReadResponse(response runtime.ClientResponse, consume
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		result := NewGetSessionBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 500:
+		result := NewGetSessionInternalServerError()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -98,6 +110,118 @@ func (o *GetSessionOK) readResponse(response runtime.ClientResponse, consumer ru
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewGetSessionBadRequest creates a GetSessionBadRequest with default headers values
+func NewGetSessionBadRequest() *GetSessionBadRequest {
+	return &GetSessionBadRequest{}
+}
+
+/*
+GetSessionBadRequest describes a response with status code 400, with default header values.
+
+error create session
+*/
+type GetSessionBadRequest struct {
+}
+
+// IsSuccess returns true when this get session bad request response has a 2xx status code
+func (o *GetSessionBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this get session bad request response has a 3xx status code
+func (o *GetSessionBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this get session bad request response has a 4xx status code
+func (o *GetSessionBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this get session bad request response has a 5xx status code
+func (o *GetSessionBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this get session bad request response a status code equal to that given
+func (o *GetSessionBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
+// Code gets the status code for the get session bad request response
+func (o *GetSessionBadRequest) Code() int {
+	return 400
+}
+
+func (o *GetSessionBadRequest) Error() string {
+	return fmt.Sprintf("[GET /Session][%d] getSessionBadRequest ", 400)
+}
+
+func (o *GetSessionBadRequest) String() string {
+	return fmt.Sprintf("[GET /Session][%d] getSessionBadRequest ", 400)
+}
+
+func (o *GetSessionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewGetSessionInternalServerError creates a GetSessionInternalServerError with default headers values
+func NewGetSessionInternalServerError() *GetSessionInternalServerError {
+	return &GetSessionInternalServerError{}
+}
+
+/*
+GetSessionInternalServerError describes a response with status code 500, with default header values.
+
+internal error
+*/
+type GetSessionInternalServerError struct {
+}
+
+// IsSuccess returns true when this get session internal server error response has a 2xx status code
+func (o *GetSessionInternalServerError) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this get session internal server error response has a 3xx status code
+func (o *GetSessionInternalServerError) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this get session internal server error response has a 4xx status code
+func (o *GetSessionInternalServerError) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this get session internal server error response has a 5xx status code
+func (o *GetSessionInternalServerError) IsServerError() bool {
+	return true
+}
+
+// IsCode returns true when this get session internal server error response a status code equal to that given
+func (o *GetSessionInternalServerError) IsCode(code int) bool {
+	return code == 500
+}
+
+// Code gets the status code for the get session internal server error response
+func (o *GetSessionInternalServerError) Code() int {
+	return 500
+}
+
+func (o *GetSessionInternalServerError) Error() string {
+	return fmt.Sprintf("[GET /Session][%d] getSessionInternalServerError ", 500)
+}
+
+func (o *GetSessionInternalServerError) String() string {
+	return fmt.Sprintf("[GET /Session][%d] getSessionInternalServerError ", 500)
+}
+
+func (o *GetSessionInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

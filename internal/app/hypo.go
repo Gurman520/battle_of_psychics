@@ -17,10 +17,12 @@ func CalculationReliability(battle Battle, number int) *Battle {
 	NB := NewBattle()
 	for i, b := range battle.Psychics {
 		if b.Hypothesis == number {
-			NB.Psychics[i].Reliability.Correct = 1 + b.Reliability.Correct
+			NB.Psychics[i].Reliability.Correct = 1.0 + b.Reliability.Correct
+		} else {
+			NB.Psychics[i].Reliability.Correct = b.Reliability.Correct
 		}
-		NB.Psychics[i].Reliability.All = b.Reliability.All + 1
-		NB.Psychics[i].Reliability.Percent = (NB.Psychics[i].Reliability.Correct / NB.Psychics[i].Reliability.All) * 100
+		NB.Psychics[i].Reliability.All = b.Reliability.All + 1.0
+		NB.Psychics[i].Reliability.Percent = int((NB.Psychics[i].Reliability.Correct / NB.Psychics[i].Reliability.All) * 100.0)
 		NB.Psychics[i].Hypothesis = b.Hypothesis
 	}
 	return NB

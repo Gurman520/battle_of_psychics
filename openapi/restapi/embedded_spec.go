@@ -54,6 +54,15 @@ func init() {
                 "$ref": "#/definitions/Response%D0%A1onceive"
               }
             }
+          },
+          "401": {
+            "description": "incorrect api key auth"
+          },
+          "404": {
+            "description": "a session with such a token was not found"
+          },
+          "500": {
+            "description": "internal error"
           }
         }
       }
@@ -74,7 +83,7 @@ func init() {
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/RResult"
+              "$ref": "#/definitions/Result"
             }
           }
         ],
@@ -84,9 +93,21 @@ func init() {
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Psychics"
+                "$ref": "#/definitions/ResponseResult"
               }
             }
+          },
+          "401": {
+            "description": "incorrect api key auth"
+          },
+          "404": {
+            "description": "a session with such a token was not found"
+          },
+          "406": {
+            "description": "cannot call a method without first calling /Conceive"
+          },
+          "500": {
+            "description": "internal error"
           }
         }
       }
@@ -106,6 +127,12 @@ func init() {
             "schema": {
               "$ref": "#/definitions/ResponseSession"
             }
+          },
+          "400": {
+            "description": "error create session"
+          },
+          "500": {
+            "description": "internal error"
           }
         }
       }
@@ -136,18 +163,10 @@ func init() {
     }
   },
   "definitions": {
-    "Psychics": {
+    "ResponseResult": {
       "type": "object",
       "properties": {
         "reliability": {
-          "type": "integer"
-        }
-      }
-    },
-    "RResult": {
-      "type": "object",
-      "properties": {
-        "number": {
           "type": "integer"
         }
       }
@@ -164,6 +183,14 @@ func init() {
       "type": "object",
       "properties": {
         "hypothesis": {
+          "type": "integer"
+        }
+      }
+    },
+    "Result": {
+      "type": "object",
+      "properties": {
+        "number": {
           "type": "integer"
         }
       }
@@ -239,6 +266,15 @@ func init() {
                 "$ref": "#/definitions/Response%D0%A1onceive"
               }
             }
+          },
+          "401": {
+            "description": "incorrect api key auth"
+          },
+          "404": {
+            "description": "a session with such a token was not found"
+          },
+          "500": {
+            "description": "internal error"
           }
         }
       }
@@ -259,7 +295,7 @@ func init() {
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/RResult"
+              "$ref": "#/definitions/Result"
             }
           }
         ],
@@ -269,9 +305,21 @@ func init() {
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Psychics"
+                "$ref": "#/definitions/ResponseResult"
               }
             }
+          },
+          "401": {
+            "description": "incorrect api key auth"
+          },
+          "404": {
+            "description": "a session with such a token was not found"
+          },
+          "406": {
+            "description": "cannot call a method without first calling /Conceive"
+          },
+          "500": {
+            "description": "internal error"
           }
         }
       }
@@ -291,6 +339,12 @@ func init() {
             "schema": {
               "$ref": "#/definitions/ResponseSession"
             }
+          },
+          "400": {
+            "description": "error create session"
+          },
+          "500": {
+            "description": "internal error"
           }
         }
       }
@@ -321,18 +375,10 @@ func init() {
     }
   },
   "definitions": {
-    "Psychics": {
+    "ResponseResult": {
       "type": "object",
       "properties": {
         "reliability": {
-          "type": "integer"
-        }
-      }
-    },
-    "RResult": {
-      "type": "object",
-      "properties": {
-        "number": {
           "type": "integer"
         }
       }
@@ -349,6 +395,14 @@ func init() {
       "type": "object",
       "properties": {
         "hypothesis": {
+          "type": "integer"
+        }
+      }
+    },
+    "Result": {
+      "type": "object",
+      "properties": {
+        "number": {
           "type": "integer"
         }
       }

@@ -61,6 +61,60 @@ func (o *GetSessionOK) WriteResponse(rw http.ResponseWriter, producer runtime.Pr
 
 func (o *GetSessionOK) GetSessionResponder() {}
 
+// GetSessionBadRequestCode is the HTTP code returned for type GetSessionBadRequest
+const GetSessionBadRequestCode int = 400
+
+/*
+GetSessionBadRequest error create session
+
+swagger:response getSessionBadRequest
+*/
+type GetSessionBadRequest struct {
+}
+
+// NewGetSessionBadRequest creates GetSessionBadRequest with default headers values
+func NewGetSessionBadRequest() *GetSessionBadRequest {
+
+	return &GetSessionBadRequest{}
+}
+
+// WriteResponse to the client
+func (o *GetSessionBadRequest) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(400)
+}
+
+func (o *GetSessionBadRequest) GetSessionResponder() {}
+
+// GetSessionInternalServerErrorCode is the HTTP code returned for type GetSessionInternalServerError
+const GetSessionInternalServerErrorCode int = 500
+
+/*
+GetSessionInternalServerError internal error
+
+swagger:response getSessionInternalServerError
+*/
+type GetSessionInternalServerError struct {
+}
+
+// NewGetSessionInternalServerError creates GetSessionInternalServerError with default headers values
+func NewGetSessionInternalServerError() *GetSessionInternalServerError {
+
+	return &GetSessionInternalServerError{}
+}
+
+// WriteResponse to the client
+func (o *GetSessionInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(500)
+}
+
+func (o *GetSessionInternalServerError) GetSessionResponder() {}
+
 type GetSessionNotImplementedResponder struct {
 	middleware.Responder
 }

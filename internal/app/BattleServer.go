@@ -43,6 +43,7 @@ func (svc *BattleServerSvc) GetHypothesis(ctx context.Context, token string) (Ba
 	}
 
 	svc.sessions[token].Battle = *CreateHypo(svc.sessions[token].Battle)
+	svc.sessions[token].Result = true
 
 	return svc.sessions[token].Battle, nil
 }
@@ -52,7 +53,13 @@ func (svc *BattleServerSvc) GetReliability(ctx context.Context, number int, toke
 		return Battle{}, ErrNotFoundSession
 	}
 
+	if !svc.sessions[token].Result {
+		return Battle{}, ErrCallBan
+	}
+
 	svc.sessions[token].Battle = *CalculationReliability(svc.sessions[token].Battle, number)
+
+	svc.sessions[token].Result = false
 
 	return svc.sessions[token].Battle, nil
 }

@@ -64,7 +64,7 @@ ResultParams contains all the parameters to send to the API endpoint
 type ResultParams struct {
 
 	// Body.
-	Body *models.RResult
+	Body *models.Result
 
 	timeout    time.Duration
 	Context    context.Context
@@ -120,13 +120,13 @@ func (o *ResultParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the result params
-func (o *ResultParams) WithBody(body *models.RResult) *ResultParams {
+func (o *ResultParams) WithBody(body *models.Result) *ResultParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the result params
-func (o *ResultParams) SetBody(body *models.RResult) {
+func (o *ResultParams) SetBody(body *models.Result) {
 	o.Body = body
 }
 

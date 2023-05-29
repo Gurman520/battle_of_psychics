@@ -64,6 +64,87 @@ func (o *ConceiveOK) WriteResponse(rw http.ResponseWriter, producer runtime.Prod
 
 func (o *ConceiveOK) ConceiveResponder() {}
 
+// ConceiveUnauthorizedCode is the HTTP code returned for type ConceiveUnauthorized
+const ConceiveUnauthorizedCode int = 401
+
+/*
+ConceiveUnauthorized incorrect api key auth
+
+swagger:response conceiveUnauthorized
+*/
+type ConceiveUnauthorized struct {
+}
+
+// NewConceiveUnauthorized creates ConceiveUnauthorized with default headers values
+func NewConceiveUnauthorized() *ConceiveUnauthorized {
+
+	return &ConceiveUnauthorized{}
+}
+
+// WriteResponse to the client
+func (o *ConceiveUnauthorized) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(401)
+}
+
+func (o *ConceiveUnauthorized) ConceiveResponder() {}
+
+// ConceiveNotFoundCode is the HTTP code returned for type ConceiveNotFound
+const ConceiveNotFoundCode int = 404
+
+/*
+ConceiveNotFound a session with such a token was not found
+
+swagger:response conceiveNotFound
+*/
+type ConceiveNotFound struct {
+}
+
+// NewConceiveNotFound creates ConceiveNotFound with default headers values
+func NewConceiveNotFound() *ConceiveNotFound {
+
+	return &ConceiveNotFound{}
+}
+
+// WriteResponse to the client
+func (o *ConceiveNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(404)
+}
+
+func (o *ConceiveNotFound) ConceiveResponder() {}
+
+// ConceiveInternalServerErrorCode is the HTTP code returned for type ConceiveInternalServerError
+const ConceiveInternalServerErrorCode int = 500
+
+/*
+ConceiveInternalServerError internal error
+
+swagger:response conceiveInternalServerError
+*/
+type ConceiveInternalServerError struct {
+}
+
+// NewConceiveInternalServerError creates ConceiveInternalServerError with default headers values
+func NewConceiveInternalServerError() *ConceiveInternalServerError {
+
+	return &ConceiveInternalServerError{}
+}
+
+// WriteResponse to the client
+func (o *ConceiveInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(500)
+}
+
+func (o *ConceiveInternalServerError) ConceiveResponder() {}
+
 type ConceiveNotImplementedResponder struct {
 	middleware.Responder
 }

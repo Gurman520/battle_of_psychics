@@ -21,8 +21,8 @@ func oneHypoToRest(p app.Psychic) *models.ResponseСonceive {
 	}
 }
 
-func ResultToRest(battle app.Battle) []*models.Psychics {
-	r := make([]*models.Psychics, 5)
+func ResultToRest(battle app.Battle) []*models.ResponseResult {
+	r := make([]*models.ResponseResult, 5)
 
 	for i, b := range battle.Psychics {
 		r[i] = oneReliabilityToRest(b)
@@ -31,8 +31,8 @@ func ResultToRest(battle app.Battle) []*models.Psychics {
 	return r
 }
 
-func oneReliabilityToRest(p app.Psychic) *models.Psychics {
-	return &models.Psychics{
+func oneReliabilityToRest(p app.Psychic) *models.ResponseResult {
+	return &models.ResponseResult{
 		Reliability: int64(p.Reliability.Percent),
 	}
 }

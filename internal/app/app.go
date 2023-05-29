@@ -6,8 +6,8 @@ type Psychic struct {
 }
 
 type Reliability struct {
-	Correct int
-	All     int
+	Correct float32
+	All     float32
 	Percent int
 }
 
@@ -17,11 +17,13 @@ type Battle struct {
 
 type Session struct {
 	Battle Battle
+	Result bool
 }
 
 func CreateNewSession() *Session {
 	return &Session{
 		Battle: *NewBattle(),
+		Result: false,
 	}
 }
 

@@ -86,19 +86,17 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
   <script>
-    window.addEventListener('DOMContentLoaded', (event) => {
-      fetch('/session')
-        .then(response => response.json())
-        .then(data => {
-          var sessionToken = data.token;
-          console.log('Получен токен доступа:', sessionToken);
-          // Сохраняем токен доступа в локальном хранилище браузера
-          localStorage.setItem('accessToken', sessionToken);
-        })
-        .catch(error => {
-          console.error('Ошибка при получении токена доступа:', error);
-        });
-    });
+    window.addEventListener('DOMContentLoaded', async function() {
+      const response = await fetch("http://127.0.0.1:8080/Session", {
+                method: "GET",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" }
+            });
+    if (response.ok === true) {
+        const message = await response.json();
+        console.log('Получен токен доступа:', message['jwt']);
+        localStorage.setItem('accessToken', sessionToken);
+    }
+  });
   </script>
 </body>
 </html>

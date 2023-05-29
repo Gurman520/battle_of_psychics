@@ -46,6 +46,10 @@ paths:
           description: Success create session
           schema:
             $ref: "#/definitions/ResponseSession"
+        400:
+          description: error create session
+        500:
+          description: internal error
 
   /Conceive:
     get:
@@ -55,12 +59,18 @@ paths:
         - key: []
       operationId: conceive
       responses:
-         200:
+        200:
           description: OK
           schema:
             type: array
             items: 
               $ref: "#/definitions/ResponseСonceive"
+        401:
+          description: incorrect api key auth
+        404:
+          description: a session with such a token was not found
+        500:
+          description: internal error
 
   /Result:
     post:
@@ -73,14 +83,22 @@ paths:
         - name: body
           in: body
           schema:
-            $ref: "#/definitions/RResult"
+            $ref: "#/definitions/Result"
       responses:
         200:
           description: ok
           schema: 
             type: array
             items: 
-              $ref: "#/definitions/Psychics"
+              $ref: "#/definitions/ResponseResult"
+        401:
+          description: incorrect api key auth
+        404:
+          description: a session with such a token was not found
+        406:
+          description: cannot call a method without first calling /Conceive
+        500:
+          description: internal error
 
 definitions:
   error:
@@ -96,7 +114,7 @@ definitions:
       message:
         type: string
   
-  Psychics:
+  ResponseResult:
     type: object
     properties:
       reliability:
@@ -114,7 +132,7 @@ definitions:
       jwt:
         type: string
 
-  RResult:
+  Result:
     type: object
     properties:
       number:
