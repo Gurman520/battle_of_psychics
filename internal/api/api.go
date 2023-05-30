@@ -24,6 +24,7 @@ type service struct {
 	battleServers app.BattleServerService
 }
 
+// creating a new server based on swagger
 func NewServer(cfg *def.Config, l *zap.SugaredLogger, battleSvc app.BattleServerService) (*restapi.Server, error) {
 	svc := &service{
 		l:             l,
@@ -73,7 +74,6 @@ func NewServer(cfg *def.Config, l *zap.SugaredLogger, battleSvc app.BattleServer
 	handleCORS := newCORS.Handler
 
 	server.SetHandler(handleCORS(api.Serve(middlewares)))
-	// server("Content-Type", "text/html")
 
 	return server, nil
 }
@@ -81,13 +81,3 @@ func NewServer(cfg *def.Config, l *zap.SugaredLogger, battleSvc app.BattleServer
 func healthCheck(params standard.HealthCheckParams, principal *models.Principal) standard.HealthCheckResponder {
 	return standard.NewHealthCheckOK().WithPayload(&standard.HealthCheckOKBody{Ok: true})
 }
-
-// func splitCommaSeparatedStr(commaSeparated string) (result []string) {
-// 	for _, item := range strings.Split(commaSeparated, ",") {
-// 		item = strings.TrimSpace(item)
-// 		if item != "" {
-// 			result = append(result, item)
-// 		}
-// 	}
-// 	return
-// }

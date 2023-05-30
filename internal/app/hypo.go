@@ -4,6 +4,7 @@ import (
 	"math/rand"
 )
 
+// Getting new Psychic Predictions
 func CreateHypo(battle Battle) *Battle {
 	NB := NewBattle()
 	for i, b := range battle.Psychics {
@@ -13,6 +14,7 @@ func CreateHypo(battle Battle) *Battle {
 	return NB
 }
 
+// Calculating the reliability of psychics
 func CalculationReliability(battle Battle, number int) *Battle {
 	NB := NewBattle()
 	for i, b := range battle.Psychics {

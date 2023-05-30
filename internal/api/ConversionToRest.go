@@ -5,6 +5,8 @@ import (
 	"battle_of_psychics/openapi/models"
 )
 
+// This file converts types from the APP layer to the API
+
 func ConceiveToRest(battle app.Battle) []*models.ResponseСonceive {
 	m := make([]*models.ResponseСonceive, 5)
 
@@ -15,12 +17,6 @@ func ConceiveToRest(battle app.Battle) []*models.ResponseСonceive {
 	return m
 }
 
-func oneHypoToRest(p app.Psychic) *models.ResponseСonceive {
-	return &models.ResponseСonceive{
-		Hypothesis: int64(p.Hypothesis),
-	}
-}
-
 func ResultToRest(battle app.Battle) []*models.ResponseResult {
 	r := make([]*models.ResponseResult, 5)
 
@@ -29,6 +25,12 @@ func ResultToRest(battle app.Battle) []*models.ResponseResult {
 	}
 
 	return r
+}
+
+func oneHypoToRest(p app.Psychic) *models.ResponseСonceive {
+	return &models.ResponseСonceive{
+		Hypothesis: int64(p.Hypothesis),
+	}
 }
 
 func oneReliabilityToRest(p app.Psychic) *models.ResponseResult {

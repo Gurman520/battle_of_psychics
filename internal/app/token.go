@@ -2,12 +2,13 @@ package app
 
 import (
 	"battle_of_psychics/internal/def"
-	"fmt"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
+// Creating a new token for a new session
+// The token is valid for 24 hours
 func CreateToken() (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
@@ -20,6 +21,5 @@ func CreateToken() (string, error) {
 		return "", err
 	}
 
-	fmt.Println(tokenString)
 	return tokenString, nil
 }

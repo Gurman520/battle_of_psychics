@@ -8,6 +8,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
+// Token validity verification function
 func ValidateHeader(stringToken string) (*models.Principal, error) {
 	claims := jwt.MapClaims{}
 	token, _ := jwt.ParseWithClaims(stringToken, claims, func(token *jwt.Token) (interface{}, error) {

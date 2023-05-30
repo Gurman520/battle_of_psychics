@@ -15,6 +15,7 @@ func (svc *service) initBattleServerHandlers(api *operations.BattleAPI) {
 	api.ServerStartHandler = server.StartHandlerFunc(svc.start)
 }
 
+// Handler for the request to open an html page
 func (svc *service) start(params server.StartParams, principal *models.Principal) server.StartResponder {
 	fileBytes, err := ioutil.ReadFile("Front/Home.html")
 	if err != nil {
@@ -25,6 +26,7 @@ func (svc *service) start(params server.StartParams, principal *models.Principal
 	return server.NewStartOK().WithPayload(f)
 }
 
+// Session Request Handler
 func (svc *service) session(params server.GetSessionParams, principal *models.Principal) server.GetSessionResponder {
 	token, err := svc.battleServers.CreateSession(params.HTTPRequest.Context())
 	switch err {
@@ -39,6 +41,7 @@ func (svc *service) session(params server.GetSessionParams, principal *models.Pr
 	}
 }
 
+// The handler of the request to receive predictions
 func (svc *service) conceive(params server.ConceiveParams, principal *models.Principal) server.ConceiveResponder {
 	battle, err := svc.battleServers.GetHypothesis(params.HTTPRequest.Context(), string(*principal))
 
@@ -58,6 +61,7 @@ func (svc *service) conceive(params server.ConceiveParams, principal *models.Pri
 	}
 }
 
+// The handler of the request for obtaining the reliability of predictions
 func (svc *service) result(params server.ResultParams, principal *models.Principal) server.ResultResponder {
 	battle, err := svc.battleServers.GetReliability(params.HTTPRequest.Context(), int(params.Body.Number), string(*principal))
 
