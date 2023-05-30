@@ -19,6 +19,9 @@ import (
 // swagger:model ResponseResult
 type ResponseResult struct {
 
+	// hypothesis
+	Hypothesis int64 `json:"hypothesis,omitempty"`
+
 	// reliability
 	Reliability *int64 `json:"reliability,omitempty"`
 }
@@ -26,6 +29,9 @@ type ResponseResult struct {
 // UnmarshalJSON unmarshals this object while disallowing additional properties from JSON
 func (m *ResponseResult) UnmarshalJSON(data []byte) error {
 	var props struct {
+
+		// hypothesis
+		Hypothesis int64 `json:"hypothesis,omitempty"`
 
 		// reliability
 		Reliability *int64 `json:"reliability,omitempty"`
@@ -37,6 +43,7 @@ func (m *ResponseResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
+	m.Hypothesis = props.Hypothesis
 	m.Reliability = props.Reliability
 	return nil
 }

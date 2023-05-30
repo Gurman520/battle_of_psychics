@@ -4,6 +4,7 @@ package restapi
 
 import (
 	"crypto/tls"
+	"io"
 	"net/http"
 
 	"github.com/go-openapi/errors"
@@ -37,7 +38,11 @@ func configureAPI(api *operations.BattleAPI) http.Handler {
 	// api.UseRedoc()
 
 	api.JSONConsumer = runtime.JSONConsumer()
+	api.UrlformConsumer = runtime.DiscardConsumer
 
+	api.HTMLProducer = runtime.ProducerFunc(func(w io.Writer, data interface{}) error {
+		return errors.NotImplemented("html producer has not yet been implemented")
+	})
 	api.JSONProducer = runtime.JSONProducer()
 
 	// Applies when the "x-token" header is set
@@ -71,6 +76,11 @@ func configureAPI(api *operations.BattleAPI) http.Handler {
 	if api.ServerResultHandler == nil {
 		api.ServerResultHandler = serverops.ResultHandlerFunc(func(params serverops.ResultParams, principal *models.Principal) server.ResultResponder {
 			return server.ResultNotImplemented()
+		})
+	}
+	if api.ServerStartHandler == nil {
+		api.ServerStartHandler = serverops.StartHandlerFunc(func(params serverops.StartParams, principal *models.Principal) server.StartResponder {
+			return server.StartNotImplemented()
 		})
 	}
 

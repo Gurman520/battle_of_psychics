@@ -12,6 +12,7 @@ import (
 	"battle_of_psychics/openapi/restapi/operations/standard"
 
 	"github.com/go-openapi/loads"
+	"github.com/go-openapi/runtime"
 	"github.com/pkg/errors"
 	"github.com/powerman/structlog"
 	"github.com/rs/cors"
@@ -44,6 +45,8 @@ func NewServer(cfg *def.Config, l *zap.SugaredLogger, battleSvc app.BattleServer
 
 	api.Logger = structlog.New(structlog.KeyUnit, "swagger").Printf
 
+	api.HTMLProducer = runtime.TextProducer()
+
 	api.StandardHealthCheckHandler = standard.HealthCheckHandlerFunc(healthCheck)
 
 	svc.initBattleServerHandlers(api)
@@ -70,6 +73,7 @@ func NewServer(cfg *def.Config, l *zap.SugaredLogger, battleSvc app.BattleServer
 	handleCORS := newCORS.Handler
 
 	server.SetHandler(handleCORS(api.Serve(middlewares)))
+	// server("Content-Type", "text/html")
 
 	return server, nil
 }

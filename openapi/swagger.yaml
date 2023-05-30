@@ -34,6 +34,25 @@ paths:
               ok:
                 type: boolean
 
+  /Start:
+    get:
+      tags:
+       - server
+      security:
+        - {}
+      operationId: start
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - text/html; charset=utf-8
+      responses:
+        200:
+          description: success and returns some html text
+          schema:
+            type: string
+        500:
+          description: Internal server error
+
   /Session:
     get:
       tags:
@@ -120,6 +139,8 @@ definitions:
       reliability:
         type: integer
         x-nullable: true
+      hypothesis:
+        type: integer
   
   ResponseСonceive:
     type: object

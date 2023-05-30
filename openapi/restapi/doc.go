@@ -11,8 +11,10 @@
 //
 //	Consumes:
 //	  - application/json
+//	  - application/x-www-form-urlencoded
 //
 //	Produces:
+//	  - text/html
 //	  - application/json
 //
 // swagger:meta

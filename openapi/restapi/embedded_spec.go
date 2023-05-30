@@ -137,6 +137,34 @@ func init() {
         }
       }
     },
+    "/Start": {
+      "get": {
+        "security": [
+          {}
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "text/html; charset=utf-8"
+        ],
+        "tags": [
+          "server"
+        ],
+        "operationId": "start",
+        "responses": {
+          "200": {
+            "description": "success and returns some html text",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/healthCheck": {
       "get": {
         "security": [
@@ -166,6 +194,9 @@ func init() {
     "ResponseResult": {
       "type": "object",
       "properties": {
+        "hypothesis": {
+          "type": "integer"
+        },
         "reliability": {
           "type": "integer",
           "x-nullable": true
@@ -350,6 +381,34 @@ func init() {
         }
       }
     },
+    "/Start": {
+      "get": {
+        "security": [
+          {}
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "text/html; charset=utf-8"
+        ],
+        "tags": [
+          "server"
+        ],
+        "operationId": "start",
+        "responses": {
+          "200": {
+            "description": "success and returns some html text",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/healthCheck": {
       "get": {
         "security": [
@@ -379,6 +438,9 @@ func init() {
     "ResponseResult": {
       "type": "object",
       "properties": {
+        "hypothesis": {
+          "type": "integer"
+        },
         "reliability": {
           "type": "integer",
           "x-nullable": true

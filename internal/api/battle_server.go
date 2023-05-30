@@ -5,13 +5,24 @@ import (
 	"battle_of_psychics/openapi/models"
 	"battle_of_psychics/openapi/restapi/operations"
 	"battle_of_psychics/openapi/restapi/operations/server"
-	"fmt"
+	"io/ioutil"
 )
 
 func (svc *service) initBattleServerHandlers(api *operations.BattleAPI) {
 	api.ServerGetSessionHandler = server.GetSessionHandlerFunc(svc.session)
 	api.ServerConceiveHandler = server.ConceiveHandlerFunc(svc.conceive)
 	api.ServerResultHandler = server.ResultHandlerFunc(svc.result)
+	api.ServerStartHandler = server.StartHandlerFunc(svc.start)
+}
+
+func (svc *service) start(params server.StartParams, principal *models.Principal) server.StartResponder {
+	fileBytes, err := ioutil.ReadFile("Front/Home.html")
+	if err != nil {
+		svc.l.Error("Upload file is fail. Err: ", err)
+	}
+	f := string(fileBytes)
+	svc.l.Info("Upload file to start is good")
+	return server.NewStartOK().WithPayload(f)
 }
 
 func (svc *service) session(params server.GetSessionParams, principal *models.Principal) server.GetSessionResponder {
@@ -21,7 +32,7 @@ func (svc *service) session(params server.GetSessionParams, principal *models.Pr
 		svc.l.Info("Session create is success")
 		return server.NewGetSessionOK().WithPayload(&models.ResponseSession{Jwt: token})
 	case app.ErrIncorrectApiKey:
-		svc.l.Info("Session create is fail. Err: ", app.ErrIncorrectApiKey)
+		svc.l.Error("Session create is fail. Err: ", app.ErrIncorrectApiKey)
 		return server.NewGetSessionBadRequest()
 	default:
 		return server.NewGetSessionInternalServerError()
@@ -37,7 +48,7 @@ func (svc *service) conceive(params server.ConceiveParams, principal *models.Pri
 		hypo := ConceiveToRest(battle)
 		return server.NewConceiveOK().WithPayload(hypo)
 	case app.ErrIncorrectApiKey:
-		svc.l.Info("Conceive is fail. Err: ", app.ErrIncorrectApiKey)
+		svc.l.Error("Conceive is fail. Err: ", app.ErrIncorrectApiKey)
 		return server.NewConceiveUnauthorized()
 	case app.ErrNotFoundSession:
 		svc.l.Info("Not found session")
@@ -53,12 +64,10 @@ func (svc *service) result(params server.ResultParams, principal *models.Princip
 	switch err {
 	case nil:
 		svc.l.Info("Result success")
-		fmt.Println(battle)
 		res := ResultToRest(battle)
-		fmt.Println(res)
 		return server.NewResultOK().WithPayload(res)
 	case app.ErrIncorrectApiKey:
-		svc.l.Info("Result is fail. Err: ", app.ErrIncorrectApiKey)
+		svc.l.Error("Result is fail. Err: ", app.ErrIncorrectApiKey)
 		return server.NewResultUnauthorized()
 	case app.ErrNotFoundSession:
 		svc.l.Info("Not found session")

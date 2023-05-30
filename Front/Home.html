@@ -10,13 +10,13 @@
 
   <div class="container mt-4">
     <div class="text-center">
-      <button class="btn btn-primary">Загадал</button>
+      <button id="start" class="btn btn-primary">Загадал</button>
     </div>
 
     </br><h3>Догадки экстрасенсов</h3>
     <div class="row mt-4">
       <div class="col">
-        <table class="table">
+        <table id="predict-table" class="table">
           <tr>
             <td>Экстрасенс 1</td>
             <td>Экстрасенс 2</td>
@@ -38,17 +38,17 @@
 </br><h3>Разрешить спор экстрасенсов</h3>
     <div class="row">
       <div class="col-md-6">
-        <input type="number" class="form-control" placeholder="Введите задуманное число">
+        <input id="inp" type="number" class="form-control" placeholder="Введите задуманное число">
       </div>
       <div class="col-md-6">
-        <button class="btn btn-primary">Ответить</button>
+        <button id="answer" class="btn btn-primary">Ответить</button>
       </div>
     </div>
 
 </br><h3>Достоверность экстрасенсов</h3>
     <div class="row mt-4">
       <div class="col">
-        <table class="table">
+        <table id="result-table" class="table">
           <tr>
             <td>Экстрасенс 1</td>
             <td>Экстрасенс 2</td>
@@ -70,13 +70,14 @@
 </br><h3>История догадок экстрасенсов</h3>
     <div class="row mt-4">
       <div class="col">
-        <table class="table">
+        <table id="dynamic-hystory-table" class="table">
           <tr>
             <td>Экстрасенс 1</td>
             <td>Экстрасенс 2</td>
             <td>Экстрасенс 3</td>
             <td>Экстрасенс 4</td>
             <td>Экстрасенс 5</td>
+            <td>Загаданное число</td>
           </tr>
         </table>
       </div>
@@ -93,10 +94,90 @@
             });
     if (response.ok === true) {
         const message = await response.json();
-        console.log('Получен токен доступа:', message['jwt']);
-        localStorage.setItem('accessToken', sessionToken);
+        var token = message['jwt']
+        console.log("Токен получен")
+        window.localStorage.setItem('Token', token);
     }
   });
+
+  document.getElementById("start").addEventListener("click", e => {
+    e.preventDefault();
+    getPrediction();
+  })
+
+  document.getElementById("answer").addEventListener("click", e => {
+    e.preventDefault();
+    var s = document.getElementById("inp");
+    var n = s.value;
+    getResult(n);
+  })
+
+  async function getPrediction() {
+    var token = window.localStorage.getItem('Token');
+    const response = await fetch("http://127.0.0.1:8080/Conceive", {
+        method: "GET",
+        headers: { "Accept": "application/json", "Content-Type": "application/json", "x-token": token },});
+    if (response.ok === true) {
+        const message = await response.json();
+        addPredict(message)
+    }
+  }
+
+  async function getResult(n) {
+    var token = window.localStorage.getItem('Token');
+    var x = parseInt(n, 10);
+    var raw = JSON.stringify({"number": x});
+    const response = await fetch("http://127.0.0.1:8080/Result", {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json", "x-token": token },
+        body: raw,
+      });
+    if (response.ok === true) {
+        const message = await response.json();
+        addResult(message)
+        addHystory(message, x)
+    }
+  }
+
+  function addResult(message) {
+    var dynamicTable = document.getElementById("result-table");
+    var rows = dynamicTable.getElementsByTagName("tr");
+    var cells = rows[1].getElementsByTagName("td");
+    for (var j = 0; j < cells.length; j++) {
+      cells[j].innerText = message[j]['reliability'];
+    }
+  }
+
+  function addPredict(message) {
+  var dynamicTable = document.getElementById("predict-table");
+  var rows = dynamicTable.getElementsByTagName("tr");
+  var cells = rows[1].getElementsByTagName("td");
+  for (var j = 0; j < cells.length; j++) {
+    cells[j].innerText = message[j]['hypothesis'];
+  }
+}
+
+function addHystory(message, number) {
+  var t = 0
+  var dynamicTable = document.getElementById("dynamic-hystory-table");
+  var row = document.createElement("tr");
+  for (var i = 0; i < message.length; i++) {
+    var cell = document.createElement("td");
+    if (number === message[i]['hypothesis']) {
+      cell.style.backgroundColor = "green";
+      t = 1
+    }
+    cell.innerHTML = message[i]['hypothesis'];
+    row.appendChild(cell);
+  }
+  var cell = document.createElement("td");
+  if (t === 1) {
+    cell.style.backgroundColor = "green";
+  }
+  cell.innerHTML = number;
+  row.appendChild(cell);
+  dynamicTable.appendChild(row);
+}
   </script>
 </body>
 </html>

@@ -7,6 +7,7 @@ package operations
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -43,8 +44,12 @@ func NewBattleAPI(spec *loads.Document) *BattleAPI {
 		APIKeyAuthenticator: security.APIKeyAuth,
 		BearerAuthenticator: security.BearerAuth,
 
-		JSONConsumer: runtime.JSONConsumer(),
+		JSONConsumer:    runtime.JSONConsumer(),
+		UrlformConsumer: runtime.DiscardConsumer,
 
+		HTMLProducer: runtime.ProducerFunc(func(w io.Writer, data interface{}) error {
+			return errors.NotImplemented("html producer has not yet been implemented")
+		}),
 		JSONProducer: runtime.JSONProducer(),
 
 		ServerConceiveHandler: serverops.ConceiveHandlerFunc(func(params serverops.ConceiveParams, principal *models.Principal) server.ConceiveResponder {
@@ -58,6 +63,9 @@ func NewBattleAPI(spec *loads.Document) *BattleAPI {
 		}),
 		ServerResultHandler: serverops.ResultHandlerFunc(func(params serverops.ResultParams, principal *models.Principal) server.ResultResponder {
 			return server.ResultNotImplemented()
+		}),
+		ServerStartHandler: serverops.StartHandlerFunc(func(params serverops.StartParams, principal *models.Principal) server.StartResponder {
+			return server.StartNotImplemented()
 		}),
 
 		// Applies when the "x-token" header is set
@@ -97,7 +105,13 @@ type BattleAPI struct {
 	// JSONConsumer registers a consumer for the following mime types:
 	//   - application/json
 	JSONConsumer runtime.Consumer
+	// UrlformConsumer registers a consumer for the following mime types:
+	//   - application/x-www-form-urlencoded
+	UrlformConsumer runtime.Consumer
 
+	// HTMLProducer registers a producer for the following mime types:
+	//   - text/html
+	HTMLProducer runtime.Producer
 	// JSONProducer registers a producer for the following mime types:
 	//   - application/json
 	JSONProducer runtime.Producer
@@ -117,6 +131,8 @@ type BattleAPI struct {
 	StandardHealthCheckHandler standard.HealthCheckHandler
 	// ServerResultHandler sets the operation handler for the result operation
 	ServerResultHandler serverops.ResultHandler
+	// ServerStartHandler sets the operation handler for the start operation
+	ServerStartHandler serverops.StartHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -189,7 +205,13 @@ func (o *BattleAPI) Validate() error {
 	if o.JSONConsumer == nil {
 		unregistered = append(unregistered, "JSONConsumer")
 	}
+	if o.UrlformConsumer == nil {
+		unregistered = append(unregistered, "UrlformConsumer")
+	}
 
+	if o.HTMLProducer == nil {
+		unregistered = append(unregistered, "HTMLProducer")
+	}
 	if o.JSONProducer == nil {
 		unregistered = append(unregistered, "JSONProducer")
 	}
@@ -209,6 +231,9 @@ func (o *BattleAPI) Validate() error {
 	}
 	if o.ServerResultHandler == nil {
 		unregistered = append(unregistered, "server.ResultHandler")
+	}
+	if o.ServerStartHandler == nil {
+		unregistered = append(unregistered, "server.StartHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -252,6 +277,8 @@ func (o *BattleAPI) ConsumersFor(mediaTypes []string) map[string]runtime.Consume
 		switch mt {
 		case "application/json":
 			result["application/json"] = o.JSONConsumer
+		case "application/x-www-form-urlencoded":
+			result["application/x-www-form-urlencoded"] = o.UrlformConsumer
 		}
 
 		if c, ok := o.customConsumers[mt]; ok {
@@ -267,6 +294,8 @@ func (o *BattleAPI) ProducersFor(mediaTypes []string) map[string]runtime.Produce
 	result := make(map[string]runtime.Producer, len(mediaTypes))
 	for _, mt := range mediaTypes {
 		switch mt {
+		case "text/html":
+			result["text/html"] = o.HTMLProducer
 		case "application/json":
 			result["application/json"] = o.JSONProducer
 		}
@@ -325,6 +354,10 @@ func (o *BattleAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/Result"] = serverops.NewResult(o.context, o.ServerResultHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/Start"] = serverops.NewStart(o.context, o.ServerStartHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

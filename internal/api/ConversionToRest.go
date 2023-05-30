@@ -35,5 +35,6 @@ func oneReliabilityToRest(p app.Psychic) *models.ResponseResult {
 	n := int64(p.Reliability.Percent)
 	return &models.ResponseResult{
 		Reliability: &n,
+		Hypothesis:  int64(p.Hypothesis),
 	}
 }
