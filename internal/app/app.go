@@ -3,14 +3,7 @@ package app
 // A structure describing a psychic
 type Psychic struct {
 	Hypothesis  int
-	Reliability Reliability
-}
-
-// A structure describing the reliability of psychic predictions
-type Reliability struct {
-	Correct float32
-	All     float32
-	Percent int
+	Reliability int
 }
 
 // A structure describing a competition between psychics

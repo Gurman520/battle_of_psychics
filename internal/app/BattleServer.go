@@ -18,10 +18,12 @@ type BattleServerSvc struct {
 }
 
 func NewBattleServerService(logger *zap.SugaredLogger) BattleServerService {
-	return &BattleServerSvc{
+	svc := &BattleServerSvc{
 		l:        logger,
 		sessions: make(map[string]*Session),
 	}
+	svc.CleanMap()
+	return svc
 }
 
 func (svc *BattleServerSvc) CreateSession(ctx context.Context) (string, error) {

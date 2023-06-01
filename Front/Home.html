@@ -8,12 +8,15 @@
 </head>
 <body>
 
+  <center id="hide" style="display: "><h5>Дорогой пользователь, тебе необходимо загадать 2х значное положительное число. </h5>
+   <h5>После того, как будешь готов, нажми кнопку нижу: &darr;</h5></center>
   <div class="container mt-4">
     <div class="text-center">
-      <button id="start" class="btn btn-primary">Загадал</button>
+      <button id="start" class="btn btn-primary" style="display: ">Загадал</button>
     </div>
 
-    </br><h3>Догадки экстрасенсов</h3>
+    <div id="DOVOD" style="display:none">
+    </br><center><h3>Догадки экстрасенсов</h3></center>
     <div class="row mt-4">
       <div class="col">
         <table id="predict-table" class="table">
@@ -34,18 +37,29 @@
         </table>
       </div>
     </div>
+  </div>
 
-</br><h3>Разрешить спор экстрасенсов</h3>
+<div id="TRACER" style="display:none">
+</br><center><h3>Разрешить спор экстрасенсов</h3></center>
     <div class="row">
       <div class="col-md-6">
-        <input id="inp" type="number" class="form-control" placeholder="Введите задуманное число">
+        <input id="inp" type="number" min="10" max="99" class="form-control" placeholder="Введите задуманное положительное двухзначное число">
       </div>
       <div class="col-md-6">
         <button id="answer" class="btn btn-primary">Ответить</button>
       </div>
+      <label style="color:#FF0000" id="ErrorLabel"></label>
     </div>
+  </div>
 
-</br><h3>Достоверность экстрасенсов</h3>
+</br><div class="text-center" id="povtor" style="display:none">
+    <center><h5>Сыграть ещё раз?</h5> </br> 
+    <label>Необходимо загадать двухзначное положительное число :)</label></center>
+    <button id="start2" class="btn btn-primary">Загадал</button>
+  </div>
+
+<div id="dostov" style="display:none">
+</br><center><h3>Достоверность экстрасенсов</h3></center>
     <div class="row mt-4">
       <div class="col">
         <table id="result-table" class="table">
@@ -57,17 +71,19 @@
             <td>Экстрасенс 5</td>
           </tr>
           <tr>
-            <td>Его достоверность в %</td>
-            <td>Его достоверность в %</td>
-            <td>Его достоверность в %</td>
-            <td>Его достоверность в %</td>
-            <td>Его достоверность в %</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
           </tr>
         </table>
       </div>
     </div>
+  </div>
 
-</br><h3>История догадок экстрасенсов</h3>
+  <div id="history" style="display:none">
+</br><center><h3>История догадок экстрасенсов</h3></center>
     <div class="row mt-4">
       <div class="col">
         <table id="dynamic-hystory-table" class="table">
@@ -82,6 +98,7 @@
         </table>
       </div>
     </div>
+  </div>
   </div>
 
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -103,14 +120,49 @@
   document.getElementById("start").addEventListener("click", e => {
     e.preventDefault();
     getPrediction();
+    document.getElementById("TRACER").style.display = '';
+    document.getElementById("DOVOD").style.display = '';
+    document.getElementById("history").style.display = 'none';
+    document.getElementById("start").style.display = 'none';
+    document.getElementById("hide").style.display = 'none';
+    document.getElementById("povtor").style.display = 'none';
+  })
+
+  document.getElementById("start2").addEventListener("click", e => {
+    e.preventDefault();
+    getPrediction();
+    document.getElementById("povtor").style.display = 'none';
+    document.getElementById("TRACER").style.display = '';
   })
 
   document.getElementById("answer").addEventListener("click", e => {
     e.preventDefault();
     var s = document.getElementById("inp");
     var n = s.value;
-    getResult(n);
+    var c = check(n)
+    if (c === true) {
+      getResult(n);
+      document.getElementById('inp').value = ''
+      document.getElementById("povtor").style.display = '';
+      document.getElementById("dostov").style.display = '';
+      document.getElementById("TRACER").style.display = 'none';
+      document.getElementById("history").style.display = '';
+    }
   })
+
+function check(number) {
+  var x = parseInt(number, 10);
+  if (isNaN(x)) {
+    showError("ErrorLabel", "Вы не ввели число")
+    return false
+  }
+  if (x > 9 && x < 100) {
+    showError("ErrorLabel", "")
+    return true
+  }
+  showError("ErrorLabel", "Введеное число не положительное двухзначное")
+  return false
+}
 
   async function getPrediction() {
     var token = window.localStorage.getItem('Token');
@@ -177,6 +229,11 @@ function addHystory(message, number) {
   cell.innerHTML = number;
   row.appendChild(cell);
   dynamicTable.appendChild(row);
+}
+
+function showError(field, errorMessage) {
+	var fieldLabel = document.getElementById(field);
+	fieldLabel.innerHTML = errorMessage;
 }
   </script>
 </body>

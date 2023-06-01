@@ -32,11 +32,11 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	Conceive(params *ConceiveParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ConceiveOK, error)
 
+	Game(params *GameParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GameOK, error)
+
 	GetSession(params *GetSessionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSessionOK, error)
 
 	Result(params *ResultParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ResultOK, error)
-
-	Start(params *StartParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*StartOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -77,6 +77,45 @@ func (a *Client) Conceive(params *ConceiveParams, authInfo runtime.ClientAuthInf
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for conceive: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+Game game API
+*/
+func (a *Client) Game(params *GameParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GameOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGameParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "game",
+		Method:             "GET",
+		PathPattern:        "/Game",
+		ProducesMediaTypes: []string{"text/html; charset=utf-8"},
+		ConsumesMediaTypes: []string{"application/x-www-form-urlencoded"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &GameReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GameOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for game: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
@@ -155,45 +194,6 @@ func (a *Client) Result(params *ResultParams, authInfo runtime.ClientAuthInfoWri
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for result: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-Start start API
-*/
-func (a *Client) Start(params *StartParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*StartOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewStartParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "start",
-		Method:             "GET",
-		PathPattern:        "/Start",
-		ProducesMediaTypes: []string{"text/html; charset=utf-8"},
-		ConsumesMediaTypes: []string{"application/x-www-form-urlencoded"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &StartReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*StartOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for start: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

@@ -63,6 +63,11 @@ func configureAPI(api *operations.BattleAPI) http.Handler {
 			return server.ConceiveNotImplemented()
 		})
 	}
+	if api.ServerGameHandler == nil {
+		api.ServerGameHandler = serverops.GameHandlerFunc(func(params serverops.GameParams, principal *models.Principal) server.GameResponder {
+			return server.GameNotImplemented()
+		})
+	}
 	if api.ServerGetSessionHandler == nil {
 		api.ServerGetSessionHandler = serverops.GetSessionHandlerFunc(func(params serverops.GetSessionParams, principal *models.Principal) server.GetSessionResponder {
 			return server.GetSessionNotImplemented()
@@ -76,11 +81,6 @@ func configureAPI(api *operations.BattleAPI) http.Handler {
 	if api.ServerResultHandler == nil {
 		api.ServerResultHandler = serverops.ResultHandlerFunc(func(params serverops.ResultParams, principal *models.Principal) server.ResultResponder {
 			return server.ResultNotImplemented()
-		})
-	}
-	if api.ServerStartHandler == nil {
-		api.ServerStartHandler = serverops.StartHandlerFunc(func(params serverops.StartParams, principal *models.Principal) server.StartResponder {
-			return server.StartNotImplemented()
 		})
 	}
 

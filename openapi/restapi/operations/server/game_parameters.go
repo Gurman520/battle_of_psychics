@@ -12,19 +12,19 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
-// NewStartParams creates a new StartParams object
+// NewGameParams creates a new GameParams object
 //
 // There are no default values defined in the spec.
-func NewStartParams() StartParams {
+func NewGameParams() GameParams {
 
-	return StartParams{}
+	return GameParams{}
 }
 
-// StartParams contains all the bound params for the start operation
+// GameParams contains all the bound params for the game operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters start
-type StartParams struct {
+// swagger:parameters game
+type GameParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
@@ -33,8 +33,8 @@ type StartParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewStartParams() beforehand.
-func (o *StartParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewGameParams() beforehand.
+func (o *GameParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r

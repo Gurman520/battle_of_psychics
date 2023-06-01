@@ -34,13 +34,13 @@ paths:
               ok:
                 type: boolean
 
-  /Start:
+  /Game:
     get:
       tags:
        - server
       security:
         - {}
-      operationId: start
+      operationId: game
       consumes:
         - application/x-www-form-urlencoded
       produces:

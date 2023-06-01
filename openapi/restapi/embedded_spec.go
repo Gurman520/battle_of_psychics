@@ -67,6 +67,34 @@ func init() {
         }
       }
     },
+    "/Game": {
+      "get": {
+        "security": [
+          {}
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "text/html; charset=utf-8"
+        ],
+        "tags": [
+          "server"
+        ],
+        "operationId": "game",
+        "responses": {
+          "200": {
+            "description": "success and returns some html text",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/Result": {
       "post": {
         "security": [
@@ -133,34 +161,6 @@ func init() {
           },
           "500": {
             "description": "internal error"
-          }
-        }
-      }
-    },
-    "/Start": {
-      "get": {
-        "security": [
-          {}
-        ],
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "produces": [
-          "text/html; charset=utf-8"
-        ],
-        "tags": [
-          "server"
-        ],
-        "operationId": "start",
-        "responses": {
-          "200": {
-            "description": "success and returns some html text",
-            "schema": {
-              "type": "string"
-            }
-          },
-          "500": {
-            "description": "Internal server error"
           }
         }
       }
@@ -311,6 +311,34 @@ func init() {
         }
       }
     },
+    "/Game": {
+      "get": {
+        "security": [
+          {}
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "text/html; charset=utf-8"
+        ],
+        "tags": [
+          "server"
+        ],
+        "operationId": "game",
+        "responses": {
+          "200": {
+            "description": "success and returns some html text",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/Result": {
       "post": {
         "security": [
@@ -377,34 +405,6 @@ func init() {
           },
           "500": {
             "description": "internal error"
-          }
-        }
-      }
-    },
-    "/Start": {
-      "get": {
-        "security": [
-          {}
-        ],
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "produces": [
-          "text/html; charset=utf-8"
-        ],
-        "tags": [
-          "server"
-        ],
-        "operationId": "start",
-        "responses": {
-          "200": {
-            "description": "success and returns some html text",
-            "schema": {
-              "type": "string"
-            }
-          },
-          "500": {
-            "description": "Internal server error"
           }
         }
       }

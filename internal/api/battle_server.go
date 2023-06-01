@@ -12,18 +12,18 @@ func (svc *service) initBattleServerHandlers(api *operations.BattleAPI) {
 	api.ServerGetSessionHandler = server.GetSessionHandlerFunc(svc.session)
 	api.ServerConceiveHandler = server.ConceiveHandlerFunc(svc.conceive)
 	api.ServerResultHandler = server.ResultHandlerFunc(svc.result)
-	api.ServerStartHandler = server.StartHandlerFunc(svc.start)
+	api.ServerGameHandler = server.GameHandlerFunc(svc.start)
 }
 
 // Handler for the request to open an html page
-func (svc *service) start(params server.StartParams, principal *models.Principal) server.StartResponder {
+func (svc *service) start(params server.GameParams, principal *models.Principal) server.GameResponder {
 	fileBytes, err := ioutil.ReadFile("Front/Home.html")
 	if err != nil {
 		svc.l.Error("Upload file is fail. Err: ", err)
 	}
 	f := string(fileBytes)
-	svc.l.Info("Upload file to start is good")
-	return server.NewStartOK().WithPayload(f)
+	svc.l.Info("Upload file to game is good")
+	return server.NewGameOK().WithPayload(f)
 }
 
 // Session Request Handler

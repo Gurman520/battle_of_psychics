@@ -13,40 +13,40 @@ import (
 	"battle_of_psychics/openapi/models"
 )
 
-// StartHandlerFunc turns a function with the right signature into a start handler
-type StartHandlerFunc func(StartParams, *models.Principal) StartResponder
+// GameHandlerFunc turns a function with the right signature into a game handler
+type GameHandlerFunc func(GameParams, *models.Principal) GameResponder
 
 // Handle executing the request and returning a response
-func (fn StartHandlerFunc) Handle(params StartParams, principal *models.Principal) StartResponder {
+func (fn GameHandlerFunc) Handle(params GameParams, principal *models.Principal) GameResponder {
 	return fn(params, principal)
 }
 
-// StartHandler interface for that can handle valid start params
-type StartHandler interface {
-	Handle(StartParams, *models.Principal) StartResponder
+// GameHandler interface for that can handle valid game params
+type GameHandler interface {
+	Handle(GameParams, *models.Principal) GameResponder
 }
 
-// NewStart creates a new http.Handler for the start operation
-func NewStart(ctx *middleware.Context, handler StartHandler) *Start {
-	return &Start{Context: ctx, Handler: handler}
+// NewGame creates a new http.Handler for the game operation
+func NewGame(ctx *middleware.Context, handler GameHandler) *Game {
+	return &Game{Context: ctx, Handler: handler}
 }
 
 /*
-	Start swagger:route GET /Start server start
+	Game swagger:route GET /Game server game
 
-Start start API
+Game game API
 */
-type Start struct {
+type Game struct {
 	Context *middleware.Context
-	Handler StartHandler
+	Handler GameHandler
 }
 
-func (o *Start) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (o *Game) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	route, rCtx, _ := o.Context.RouteInfo(r)
 	if rCtx != nil {
 		*r = *rCtx
 	}
-	var Params = NewStartParams()
+	var Params = NewGameParams()
 	uprinc, aCtx, err := o.Context.Authorize(r, route)
 	if err != nil {
 		o.Context.Respond(rw, r, route.Produces, route, err)

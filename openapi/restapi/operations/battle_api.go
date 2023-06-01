@@ -55,6 +55,9 @@ func NewBattleAPI(spec *loads.Document) *BattleAPI {
 		ServerConceiveHandler: serverops.ConceiveHandlerFunc(func(params serverops.ConceiveParams, principal *models.Principal) server.ConceiveResponder {
 			return server.ConceiveNotImplemented()
 		}),
+		ServerGameHandler: serverops.GameHandlerFunc(func(params serverops.GameParams, principal *models.Principal) server.GameResponder {
+			return server.GameNotImplemented()
+		}),
 		ServerGetSessionHandler: serverops.GetSessionHandlerFunc(func(params serverops.GetSessionParams, principal *models.Principal) server.GetSessionResponder {
 			return server.GetSessionNotImplemented()
 		}),
@@ -63,9 +66,6 @@ func NewBattleAPI(spec *loads.Document) *BattleAPI {
 		}),
 		ServerResultHandler: serverops.ResultHandlerFunc(func(params serverops.ResultParams, principal *models.Principal) server.ResultResponder {
 			return server.ResultNotImplemented()
-		}),
-		ServerStartHandler: serverops.StartHandlerFunc(func(params serverops.StartParams, principal *models.Principal) server.StartResponder {
-			return server.StartNotImplemented()
 		}),
 
 		// Applies when the "x-token" header is set
@@ -125,14 +125,14 @@ type BattleAPI struct {
 
 	// ServerConceiveHandler sets the operation handler for the conceive operation
 	ServerConceiveHandler serverops.ConceiveHandler
+	// ServerGameHandler sets the operation handler for the game operation
+	ServerGameHandler serverops.GameHandler
 	// ServerGetSessionHandler sets the operation handler for the get session operation
 	ServerGetSessionHandler serverops.GetSessionHandler
 	// StandardHealthCheckHandler sets the operation handler for the health check operation
 	StandardHealthCheckHandler standard.HealthCheckHandler
 	// ServerResultHandler sets the operation handler for the result operation
 	ServerResultHandler serverops.ResultHandler
-	// ServerStartHandler sets the operation handler for the start operation
-	ServerStartHandler serverops.StartHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -223,6 +223,9 @@ func (o *BattleAPI) Validate() error {
 	if o.ServerConceiveHandler == nil {
 		unregistered = append(unregistered, "server.ConceiveHandler")
 	}
+	if o.ServerGameHandler == nil {
+		unregistered = append(unregistered, "server.GameHandler")
+	}
 	if o.ServerGetSessionHandler == nil {
 		unregistered = append(unregistered, "server.GetSessionHandler")
 	}
@@ -231,9 +234,6 @@ func (o *BattleAPI) Validate() error {
 	}
 	if o.ServerResultHandler == nil {
 		unregistered = append(unregistered, "server.ResultHandler")
-	}
-	if o.ServerStartHandler == nil {
-		unregistered = append(unregistered, "server.StartHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -345,6 +345,10 @@ func (o *BattleAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/Game"] = serverops.NewGame(o.context, o.ServerGameHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/Session"] = serverops.NewGetSession(o.context, o.ServerGetSessionHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
@@ -354,10 +358,6 @@ func (o *BattleAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/Result"] = serverops.NewResult(o.context, o.ServerResultHandler)
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/Start"] = serverops.NewStart(o.context, o.ServerStartHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

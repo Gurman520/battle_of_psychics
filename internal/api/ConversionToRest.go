@@ -34,7 +34,7 @@ func oneHypoToRest(p app.Psychic) *models.ResponseСonceive {
 }
 
 func oneReliabilityToRest(p app.Psychic) *models.ResponseResult {
-	n := int64(p.Reliability.Percent)
+	n := int64(p.Reliability)
 	return &models.ResponseResult{
 		Reliability: &n,
 		Hypothesis:  int64(p.Hypothesis),
