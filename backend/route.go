@@ -46,6 +46,21 @@ func (s *Server) Hypotheses(w http.ResponseWriter, r *http.Request) {
 
 	// Вызов метода создания гипотез.
 
+	data := ViewData{
+		Title: "Битва экстрасенсов",
+	}
+	files := []string{
+		"./templates/hypotheses/hypothesesPage.tmpl",
+		"./templates/base.tmpl",
+		"./templates/hypotheses/hypotheses.tmpl",
+		"./templates/finish.tmpl",
+	}
+	tmpl, err := template.ParseFiles(files...)
+	if err != nil {
+		fmt.Println("Error parser ", err)
+	}
+	tmpl.Execute(w, data)
+
 }
 
 func (s *Server) RankPsychics(w http.ResponseWriter, r *http.Request) {
@@ -59,4 +74,19 @@ func (s *Server) RankPsychics(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "The cake is a lie!")
 
 	// Вызов метода расчета достоверности экстрасенсов
+
+	data := ViewData{
+		Title: "Битва экстрасенсов",
+	}
+	files := []string{
+		"./templates/rating/ratingPage.tmpl",
+		"./templates/base.tmpl",
+		"./templates/rating/rating.tmpl",
+		"./templates/finish.tmpl",
+	}
+	tmpl, err := template.ParseFiles(files...)
+	if err != nil {
+		fmt.Println("Error parser ", err)
+	}
+	tmpl.Execute(w, data)
 }
