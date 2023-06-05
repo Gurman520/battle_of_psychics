@@ -1,34 +1,22 @@
 package main
 
 import (
-	"battle_of_psychics/internal/api"
-	"battle_of_psychics/internal/app"
-	"battle_of_psychics/internal/def"
 	"log"
+	"net/http"
+
+	back "battle_of_psychics/backend"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	cfg, err := def.NewConfig()
-	if err != nil {
-		log.Fatalln("new config: ", err)
-	}
+	router := mux.NewRouter()
+	server := back.CreateNewServer()
 
-	l, err := def.NewLogger(cfg.LogLevel)
-	if err != nil {
-		log.Fatalln("new logger: ", err)
-	}
+	router.HandleFunc("/startGame", server.StartGame).Methods("GET")
+	router.HandleFunc("/hypotheses", server.Hypotheses).Methods("GET")
+	router.HandleFunc("/rank", server.RankPsychics).Methods("POST")
 
-	battleSvc := app.NewBattleServerService(l)
-
-	server, err := api.NewServer(cfg, l, battleSvc)
-	if err != nil {
-		l.Fatalln("init rest server:", err)
-	}
-
-	err = server.Serve()
-	if err != nil {
-		l.Fatalln("rest api serve:", err)
-	}
-
-	l.Info("started server at: ", cfg.HTTPPort)
+	log.Println("Server is listening...")
+	log.Fatal(http.ListenAndServe("localhost:8080", router))
 }
