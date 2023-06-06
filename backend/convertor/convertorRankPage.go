@@ -16,3 +16,11 @@ func ConvertRank(battle battle.Battle) map[int][]int {
 	}
 	return hi
 }
+
+func ConvertReliability(battle battle.Battle) []int {
+	sp := make([]int, 0)
+	for _, b := range battle.Psychics {
+		sp = append(sp, b.Reliability)
+	}
+	return sp
+}

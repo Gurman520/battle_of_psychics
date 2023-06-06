@@ -16,7 +16,7 @@ import (
 func (s *Server) StartGame(w http.ResponseWriter, r *http.Request) {
 	log.Println("Start Game init")
 	session, _ := s.Sessions.Get(r, "cookie-name")
-	session.Values["Active"] = true
+	session.Values["TrueGameActive"] = true
 	sessionID := uuid.NewString()
 	session.Values["Session ID"] = sessionID
 	session.Save(r, w)
@@ -25,13 +25,8 @@ func (s *Server) StartGame(w http.ResponseWriter, r *http.Request) {
 	data := view.ViewDataStartPage{
 		Title: "Битва экстрасенсов",
 	}
-	files := []string{
-		"./templates/start/startPage.tmpl",
-		"./templates/base.tmpl",
-		"./templates/start/start.tmpl",
-		"./templates/finish.tmpl",
-	}
-	tmpl, err := template.ParseFiles(files...)
+
+	tmpl, err := template.ParseFiles(filesStart...)
 	if err != nil {
 		fmt.Println("Error parser ", err)
 	}
@@ -42,9 +37,16 @@ func (s *Server) Hypotheses(w http.ResponseWriter, r *http.Request) {
 	log.Println("Hypotheses init")
 	session, _ := s.Sessions.Get(r, "cookie-name")
 
+	if auth, ok := session.Values["TrueGameActive"].(bool); !ok || !auth {
+		log.Println("Hypotheses - Forbidden")
+		http.Error(w, "Forbidden", http.StatusForbidden)
+		return
+	}
+
 	sessionID := session.Values["Session ID"].(string)
 
-	if auth, ok := session.Values["Active"].(bool); !ok || !auth {
+	if _, ok := s.Battles[sessionID]; !ok {
+		log.Println("Hypotheses - Forbidden - Not Valid Session")
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}
@@ -53,19 +55,14 @@ func (s *Server) Hypotheses(w http.ResponseWriter, r *http.Request) {
 	b := *s.Battles[sessionID]
 	s.Battles[sessionID] = battle.CreateHypotheses(b)
 
-	hypo := convertor.Convert(*s.Battles[sessionID])
+	hypotheses := convertor.ConvertHypotheses(*s.Battles[sessionID])
 
 	data := view.ViewDataHypothesesPage{
-		Title:      "Битва экстрасенсов",
-		Hypothesis: hypo,
+		Title:      "Предположения",
+		Hypothesis: hypotheses,
 	}
-	files := []string{
-		"./templates/hypotheses/hypothesesPage.tmpl",
-		"./templates/base.tmpl",
-		"./templates/hypotheses/hypotheses.tmpl",
-		"./templates/finish.tmpl",
-	}
-	tmpl, err := template.ParseFiles(files...)
+
+	tmpl, err := template.ParseFiles(filesHypotheses...)
 	if err != nil {
 		fmt.Println("Error parser ", err)
 	}
@@ -75,9 +72,11 @@ func (s *Server) Hypotheses(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) RankPsychics(w http.ResponseWriter, r *http.Request) {
 	log.Println("RankPsychics init")
+
 	session, _ := s.Sessions.Get(r, "cookie-name")
 
-	if auth, ok := session.Values["Active"].(bool); !ok || !auth {
+	if auth, ok := session.Values["TrueGameActive"].(bool); !ok || !auth {
+		log.Println("RankPsychics - Forbidden")
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}
@@ -98,17 +97,12 @@ func (s *Server) RankPsychics(w http.ResponseWriter, r *http.Request) {
 	rel := convertor.ConvertReliability(*s.Battles[sessionID])
 
 	data := view.ViewDataRankPage{
-		Title:       "Битва экстрасенсов",
+		Title:       "Результаты битвы",
 		History:     history,
 		Reliability: rel,
 	}
-	files := []string{
-		"./templates/rating/ratingPage.tmpl",
-		"./templates/base.tmpl",
-		"./templates/rating/rating.tmpl",
-		"./templates/finish.tmpl",
-	}
-	tmpl, err := template.ParseFiles(files...)
+
+	tmpl, err := template.ParseFiles(filesRank...)
 	if err != nil {
 		fmt.Println("Error parser ", err)
 	}
