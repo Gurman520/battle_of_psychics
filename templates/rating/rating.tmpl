@@ -1,4 +1,64 @@
 {{define "rating" -}}
 
+<div>
+</br><center><h3>Достоверность экстрасенсов</h3></center>
+    <div class="row mt-4">
+      <div class="col">
+        <table id="result-table" class="table">
+          <tr>
+            <td>Экстрасенс 1</td>
+            <td>Экстрасенс 2</td>
+            <td>Экстрасенс 3</td>
+            <td>Экстрасенс 4</td>
+            <td>Экстрасенс 5</td>
+          </tr>
+          <tr>
+            {{ range $oneReb := .Reliability }}
+                <td>{{ $oneReb }}</td>
+            {{ end }}
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+<div>
+</br><center><h3>История догадок экстрасенсов</h3></center>
+    <div class="row mt-4">
+        <div class="col">
+            <table id="dynamic-hystory-table" class="table">
+                <tr>
+                    <td>Экстрасенс 1</td>
+                    <td>Экстрасенс 2</td>
+                    <td>Экстрасенс 3</td>
+                    <td>Экстрасенс 4</td>
+                    <td>Экстрасенс 5</td>
+                    <td>Загаданное число</td>
+                </tr>
+                {{ range $key, $oneGame := .History }}
+                    <tr>
+                    {{ range $one := $oneGame }}
+                        <td>{{ $one }}</td>
+                    {{ end }}
+                    </tr>
+                {{ end }}
+            </table>
+        </div>
+    </div>
+  </div>
+
+
+</br><center><h3>Сыграть еще раз?</h3></center>
+</br><div class="row justify-content-center">
+<form action="/hypotheses" method="get">
+    <div class="row">
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary text ">Сыграть!</button>
+        </div>
+    </div>
+</form>
+</div>
+
 
 {{end}}

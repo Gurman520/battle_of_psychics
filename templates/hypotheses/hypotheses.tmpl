@@ -1,4 +1,39 @@
 {{define "hypotheses" -}}
+<div>
+</br><center><h3>Догадки экстрасенсов</h3></center>
+    <div class="row mt-4">
+        <div class="col">
+            <table class="table table-borderedtable table-bordered">
+                <tr>
+                    <td>Экстрасенс 1</td>
+                    <td>Экстрасенс 2</td>
+                    <td>Экстрасенс 3</td>
+                    <td>Экстрасенс 4</td>
+                    <td>Экстрасенс 5</td>
+                </tr>
+                <tr>
+                    {{ range $film := .Hypothesis }}
+                        <td>{{ $film }}</td>
+                    {{ end }}
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+</br><center><h3>Разрешить спор экстрасенсов</h3></center>
+<form action="/rank" method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <input name="number" type="number" min="10" max="99" class="form-control" placeholder="Введите задуманное положительное двухзначное число" required>
+        </div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary">Ответить</button>
+        </div>
+    </div>
+</form>
+
 
 
 {{end}}

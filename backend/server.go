@@ -7,14 +7,14 @@ import (
 )
 
 type Server struct {
-	Battle   map[*sessions.Session]*bat.Battle
+	Battles  map[string]*bat.Battle
 	Sessions *sessions.CookieStore
 }
 
 func CreateNewServer() *Server {
 	key := []byte("super-secret-key")
 	return &Server{
-		Battle:   make(map[*sessions.Session]*bat.Battle),
+		Battles:  make(map[string]*bat.Battle),
 		Sessions: sessions.NewCookieStore(key),
 	}
 }

@@ -1,24 +1,28 @@
 package backend
 
 import (
+	view "battle_of_psychics/backend/ViewStruct"
 	"battle_of_psychics/backend/battle"
+	"battle_of_psychics/backend/convertor"
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
+	"strconv"
+
+	"github.com/google/uuid"
 )
 
-type ViewData struct {
-	Title   string
-	Message string
-}
-
 func (s *Server) StartGame(w http.ResponseWriter, r *http.Request) {
+	log.Println("Start Game init")
 	session, _ := s.Sessions.Get(r, "cookie-name")
 	session.Values["Active"] = true
+	sessionID := uuid.NewString()
+	session.Values["Session ID"] = sessionID
 	session.Save(r, w)
-	s.Battle[session] = battle.NewBattle()
+	s.Battles[sessionID] = battle.NewBattle()
 
-	data := ViewData{
+	data := view.ViewDataStartPage{
 		Title: "Битва экстрасенсов",
 	}
 	files := []string{
@@ -35,19 +39,25 @@ func (s *Server) StartGame(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) Hypotheses(w http.ResponseWriter, r *http.Request) {
+	log.Println("Hypotheses init")
 	session, _ := s.Sessions.Get(r, "cookie-name")
+
+	sessionID := session.Values["Session ID"].(string)
 
 	if auth, ok := session.Values["Active"].(bool); !ok || !auth {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}
 
-	fmt.Fprintln(w, "The cake is a lie!")
+	// Вызвать другой слой
+	b := *s.Battles[sessionID]
+	s.Battles[sessionID] = battle.CreateHypotheses(b)
 
-	// Вызов метода создания гипотез.
+	hypo := convertor.Convert(*s.Battles[sessionID])
 
-	data := ViewData{
-		Title: "Битва экстрасенсов",
+	data := view.ViewDataHypothesesPage{
+		Title:      "Битва экстрасенсов",
+		Hypothesis: hypo,
 	}
 	files := []string{
 		"./templates/hypotheses/hypothesesPage.tmpl",
@@ -64,6 +74,7 @@ func (s *Server) Hypotheses(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) RankPsychics(w http.ResponseWriter, r *http.Request) {
+	log.Println("RankPsychics init")
 	session, _ := s.Sessions.Get(r, "cookie-name")
 
 	if auth, ok := session.Values["Active"].(bool); !ok || !auth {
@@ -71,12 +82,25 @@ func (s *Server) RankPsychics(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintln(w, "The cake is a lie!")
+	sessionID := session.Values["Session ID"].(string)
 
-	// Вызов метода расчета достоверности экстрасенсов
+	r.ParseForm()
+	number, _ := strconv.Atoi(r.FormValue("number"))
 
-	data := ViewData{
-		Title: "Битва экстрасенсов",
+	// Добавить вызов следующего слоя
+	s.Battles[sessionID].UserNumber = append(s.Battles[sessionID].UserNumber, number)
+
+	b := *s.Battles[sessionID]
+	s.Battles[sessionID] = battle.CalculationReliability(b)
+
+	history := convertor.ConvertRank(*s.Battles[sessionID])
+
+	rel := convertor.ConvertReliability(*s.Battles[sessionID])
+
+	data := view.ViewDataRankPage{
+		Title:       "Битва экстрасенсов",
+		History:     history,
+		Reliability: rel,
 	}
 	files := []string{
 		"./templates/rating/ratingPage.tmpl",

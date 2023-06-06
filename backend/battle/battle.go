@@ -7,7 +7,9 @@ type Battle struct {
 }
 
 func NewBattle() *Battle {
-	return &Battle{
-		Psychics: [5]Psychic{{}, {}, {}, {}, {}},
+	b := &Battle{
+		Psychics:   [5]Psychic{{make([]int, 0), 0}, {make([]int, 0), 0}, {make([]int, 0), 0}, {make([]int, 0), 0}, {make([]int, 0), 0}},
+		UserNumber: []int{},
 	}
+	return b
 }
