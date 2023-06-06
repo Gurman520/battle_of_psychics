@@ -1,4 +1,4 @@
-package backend
+package server
 
 var filesStart = []string{
 	"./templates/start/startPage.tmpl",

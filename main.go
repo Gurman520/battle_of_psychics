@@ -4,19 +4,21 @@ import (
 	"log"
 	"net/http"
 
-	back "battle_of_psychics/backend"
+	svr "battle_of_psychics/backend/server"
 
 	"github.com/gorilla/mux"
 )
 
 func main() {
 	router := mux.NewRouter()
-	server := back.CreateNewServer()
+	server := svr.CreateNewServer()
 
+	// Handlers
 	router.HandleFunc("/startGame", server.StartGame).Methods("GET")
 	router.HandleFunc("/hypotheses", server.Hypotheses).Methods("GET")
 	router.HandleFunc("/rank", server.RankPsychics).Methods("POST")
 
-	log.Println("Server is listening...")
+	log.Println("Server is listening in localhost:8080...")
+	log.Println("Start Game in localhost:8080/startGame")
 	log.Fatal(http.ListenAndServe("localhost:8080", router))
 }

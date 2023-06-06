@@ -1,4 +1,4 @@
-package backend
+package server
 
 import (
 	bat "battle_of_psychics/backend/battle"

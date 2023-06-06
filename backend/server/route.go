@@ -1,4 +1,4 @@
-package backend
+package server
 
 import (
 	view "battle_of_psychics/backend/ViewStruct"
@@ -94,12 +94,12 @@ func (s *Server) RankPsychics(w http.ResponseWriter, r *http.Request) {
 
 	history := convertor.ConvertRank(*s.Battles[sessionID])
 
-	rel := convertor.ConvertReliability(*s.Battles[sessionID])
+	reliability := convertor.ConvertReliability(*s.Battles[sessionID])
 
 	data := view.ViewDataRankPage{
 		Title:       "Результаты битвы",
 		History:     history,
-		Reliability: rel,
+		Reliability: reliability,
 	}
 
 	tmpl, err := template.ParseFiles(filesRank...)
