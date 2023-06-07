@@ -10,7 +10,7 @@ RUN wget https://dl.google.com/go/go1.20.4.linux-amd64.tar.gz && tar -C /opt -xz
 RUN git clone https://github.com/Gurman520/battle_of_psychics
 
 # Setup
-RUN cd ./battle_of_psychics && export PATH=$PATH:/opt/go/bin && go build ./main.go
+RUN cd ./battle_of_psychics && git checkout main_v2 && export PATH=$PATH:/opt/go/bin && go build ./main.go
 
 RUN cp -r ./battle_of_psychics/. .
 

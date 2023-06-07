@@ -4,54 +4,34 @@ import (
 	view "battle_of_psychics/backend/ViewStruct"
 	"battle_of_psychics/backend/battle"
 	"battle_of_psychics/backend/convertor"
-	"fmt"
-	"html/template"
-	"log"
-	"net/http"
-	"strconv"
 
 	"github.com/google/uuid"
+	"github.com/gorilla/sessions"
 )
 
-func (s *Server) StartGame(w http.ResponseWriter, r *http.Request) {
-	log.Println("Start Game init")
-	session, _ := s.Sessions.Get(r, "cookie-name")
+func (s *Server) Start(session *sessions.Session) (view.ViewDataStartPage, error) {
 	session.Values["TrueGameActive"] = true
 	sessionID := uuid.NewString()
 	session.Values["Session ID"] = sessionID
-	session.Save(r, w)
 	s.Battles[sessionID] = battle.NewBattle()
 
 	data := view.ViewDataStartPage{
 		Title: "Битва экстрасенсов",
 	}
-
-	tmpl, err := template.ParseFiles(filesStart...)
-	if err != nil {
-		fmt.Println("Error parser ", err)
-	}
-	tmpl.Execute(w, data)
+	return data, nil
 }
 
-func (s *Server) Hypotheses(w http.ResponseWriter, r *http.Request) {
-	log.Println("Hypotheses init")
-	session, _ := s.Sessions.Get(r, "cookie-name")
-
+func (s *Server) Hypotheses(session *sessions.Session) (view.ViewDataHypothesesPage, error) {
 	if auth, ok := session.Values["TrueGameActive"].(bool); !ok || !auth {
-		log.Println("Hypotheses - Forbidden")
-		http.Error(w, "Forbidden", http.StatusForbidden)
-		return
+		return view.ViewDataHypothesesPage{}, ErrForbiden
 	}
 
 	sessionID := session.Values["Session ID"].(string)
 
 	if _, ok := s.Battles[sessionID]; !ok {
-		log.Println("Hypotheses - Forbidden - Not Valid Session")
-		http.Error(w, "Forbidden", http.StatusForbidden)
-		return
+		return view.ViewDataHypothesesPage{}, ErrNotValid
 	}
 
-	// Вызвать другой слой
 	b := *s.Battles[sessionID]
 	s.Battles[sessionID] = battle.CreateHypotheses(b)
 
@@ -61,32 +41,20 @@ func (s *Server) Hypotheses(w http.ResponseWriter, r *http.Request) {
 		Title:      "Предположения",
 		Hypothesis: hypotheses,
 	}
-
-	tmpl, err := template.ParseFiles(filesHypotheses...)
-	if err != nil {
-		fmt.Println("Error parser ", err)
-	}
-	tmpl.Execute(w, data)
-
+	return data, nil
 }
 
-func (s *Server) RankPsychics(w http.ResponseWriter, r *http.Request) {
-	log.Println("RankPsychics init")
-
-	session, _ := s.Sessions.Get(r, "cookie-name")
-
+func (s *Server) Rank(session *sessions.Session, number int) (view.ViewDataRankPage, error) {
 	if auth, ok := session.Values["TrueGameActive"].(bool); !ok || !auth {
-		log.Println("RankPsychics - Forbidden")
-		http.Error(w, "Forbidden", http.StatusForbidden)
-		return
+		return view.ViewDataRankPage{}, ErrForbiden
 	}
 
 	sessionID := session.Values["Session ID"].(string)
 
-	r.ParseForm()
-	number, _ := strconv.Atoi(r.FormValue("number"))
+	if _, ok := s.Battles[sessionID]; !ok {
+		return view.ViewDataRankPage{}, ErrNotValid
+	}
 
-	// Добавить вызов следующего слоя
 	s.Battles[sessionID].UserNumber = append(s.Battles[sessionID].UserNumber, number)
 
 	b := *s.Battles[sessionID]
@@ -101,10 +69,5 @@ func (s *Server) RankPsychics(w http.ResponseWriter, r *http.Request) {
 		History:     history,
 		Reliability: reliability,
 	}
-
-	tmpl, err := template.ParseFiles(filesRank...)
-	if err != nil {
-		fmt.Println("Error parser ", err)
-	}
-	tmpl.Execute(w, data)
+	return data, nil
 }

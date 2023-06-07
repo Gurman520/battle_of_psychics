@@ -14,11 +14,11 @@ func main() {
 	server := svr.CreateNewServer()
 
 	// Handlers
-	router.HandleFunc("/startGame", server.StartGame).Methods("GET")
-	router.HandleFunc("/hypotheses", server.Hypotheses).Methods("GET")
-	router.HandleFunc("/rank", server.RankPsychics).Methods("POST")
+	router.HandleFunc("/", server.Home).Methods("GET")
+	router.HandleFunc("/startGame", server.StartHandler).Methods("GET")
+	router.HandleFunc("/hypotheses", server.HypothesesHandler).Methods("GET")
+	router.HandleFunc("/rank", server.RankPsychicsHandler).Methods("POST")
 
-	log.Println("Server is listening in localhost:8080...")
-	log.Println("Start Game in localhost:8080/startGame")
-	log.Fatal(http.ListenAndServe("localhost:8080", router))
+	log.Println("Server is listening in 127.0.0.1:8080...")
+	log.Fatal(http.ListenAndServe("127.0.0.1:8080", router))
 }
