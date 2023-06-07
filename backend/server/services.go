@@ -9,6 +9,7 @@ import (
 	"github.com/gorilla/sessions"
 )
 
+// The input function receives the session, checks the validity of the session. And if everything is correct it creates a structure that will be displayed on the start page
 func (s *Server) Start(session *sessions.Session) (view.ViewDataStartPage, error) {
 	session.Values["TrueGameActive"] = true
 	sessionID := uuid.NewString()
@@ -21,6 +22,8 @@ func (s *Server) Start(session *sessions.Session) (view.ViewDataStartPage, error
 	return data, nil
 }
 
+// The input function receives the session, checks the validity of the session.
+// And if everything is correct, it gets a list of hypotheses that psychics have put forward. Then creates a structure that will be displayed on the hypothesis page
 func (s *Server) Hypotheses(session *sessions.Session) (view.ViewDataHypothesesPage, error) {
 	if auth, ok := session.Values["TrueGameActive"].(bool); !ok || !auth {
 		return view.ViewDataHypothesesPage{}, ErrForbiden
@@ -44,7 +47,9 @@ func (s *Server) Hypotheses(session *sessions.Session) (view.ViewDataHypothesesP
 	return data, nil
 }
 
-func (s *Server) Rank(session *sessions.Session, number int) (view.ViewDataRankPage, error) {
+// The input function receives the session and the number entered by the user, checks the validity of the session.
+// And if everything is correct, it calculates the reliability of each psychic. Then creates a structure that will be displayed on the results page
+func (s *Server) Result(session *sessions.Session, number int) (view.ViewDataRankPage, error) {
 	if auth, ok := session.Values["TrueGameActive"].(bool); !ok || !auth {
 		return view.ViewDataRankPage{}, ErrForbiden
 	}
@@ -60,7 +65,7 @@ func (s *Server) Rank(session *sessions.Session, number int) (view.ViewDataRankP
 	b := *s.Battles[sessionID]
 	s.Battles[sessionID] = battle.CalculationReliability(b)
 
-	history := convertor.ConvertRank(*s.Battles[sessionID])
+	history := convertor.ConvertResult(*s.Battles[sessionID])
 
 	reliability := convertor.ConvertReliability(*s.Battles[sessionID])
 

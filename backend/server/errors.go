@@ -1,3 +1,4 @@
+// The file describes all the errors that are used in the project
 package server
 
 import "errors"

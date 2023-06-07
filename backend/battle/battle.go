@@ -6,6 +6,7 @@ type Battle struct {
 	UserNumber []int
 }
 
+// The function creates a new battle
 func NewBattle() *Battle {
 	b := &Battle{
 		Psychics:   [5]Psychic{{make([]int, 0), 0}, {make([]int, 0), 0}, {make([]int, 0), 0}, {make([]int, 0), 0}, {make([]int, 0), 0}},
