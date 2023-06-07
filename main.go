@@ -19,6 +19,6 @@ func main() {
 	router.HandleFunc("/hypotheses", server.HypothesesHandler).Methods("GET")
 	router.HandleFunc("/rank", server.RankPsychicsHandler).Methods("POST")
 
-	log.Println("Server is listening in 127.0.0.1:8080...")
-	log.Fatal(http.ListenAndServe("127.0.0.1:8080", router))
+	log.Println("Server is listening in 0.0.0.0:8080...")
+	log.Fatal(http.ListenAndServe("0.0.0.0:8080", router))
 }
