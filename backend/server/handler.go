@@ -42,7 +42,7 @@ func (s *Server) HypothesesHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Hypotheses init")
 	session, _ := s.Sessions.Get(r, "cookie-name")
 
-	data, err := s.Hypotheses(session)
+	data, err := s.GetExtrasenceHypotheses(session)
 
 	switch err {
 	case nil:
@@ -76,7 +76,7 @@ func (s *Server) ResultBattleHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	number, _ := strconv.Atoi(r.FormValue("number"))
 
-	data, err := s.Result(session, number)
+	data, err := s.GetExtrasenceResult(session, number)
 
 	switch err {
 	case nil:

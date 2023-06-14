@@ -5,7 +5,7 @@ import (
 )
 
 // The function converts all the guesses of psychics and the numbers that the user entered into the map, so that it is convenient to display it in html
-func ConvertResult(battle battle.Battle) map[int][]int {
+func ConvertvExtrasenceResultToViewStruct(battle battle.Battle) map[int][]int {
 	hi := make(map[int][]int)
 	for i := 0; i < len(battle.Psychics[0].Hypothesis); i++ {
 		sp := make([]int, 0)
@@ -19,7 +19,7 @@ func ConvertResult(battle battle.Battle) map[int][]int {
 }
 
 // The function converts the authenticity of each psychic into a slice
-func ConvertReliability(battle battle.Battle) []int {
+func ConvertExtrasenceReliabilityToSlice(battle battle.Battle) []int {
 	sp := make([]int, 0)
 	for _, b := range battle.Psychics {
 		sp = append(sp, b.Reliability)
